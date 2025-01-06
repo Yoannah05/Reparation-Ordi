@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reparation List</title>
+</head>
+<body>
+    <h1>Reparation List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ordinateur ID</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Price</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="reparation : ${reparations}">
+                <td th:text="${reparation.idReparation}"></td>
+                <td th:text="${reparation.idOrdinateur}"></td>
+                <td th:text="${reparation.dateDebut}"></td>
+                <td th:text="${reparation.dateFin}"></td>
+                <td th:text="${reparation.prixReparation}"></td>
+                <td th:text="${reparation.statut ? 'Completed' : 'Pending'}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

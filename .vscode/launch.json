@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-AmboarikoApplication<amboariko>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "mg.itu.amboariko.AmboarikoApplication",
+      "projectName": "amboariko",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

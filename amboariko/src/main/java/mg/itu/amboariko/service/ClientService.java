@@ -22,7 +22,7 @@ public class ClientService {
     public List<Client> getAllClients() {
         return (List<Client>) clientRepository.findAll(); 
     }
-    public Client saveClient(Client client) {
+    public Client save(Client client) {
         return clientRepository.save(client);
     }
 

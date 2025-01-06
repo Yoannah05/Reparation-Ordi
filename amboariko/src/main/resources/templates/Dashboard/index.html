@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+    <style>
+        /* Simple styling for the dashboard */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .dashboard-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .card-content {
+            font-size: 18px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Dashboard</h1>
+        
+        <!-- Dashboard Cards -->
+        <div class="dashboard-card">
+            <div class="card-header">Total Reparations</div>
+            <div class="card-content" th:text="${totalReparations}">0</div>
+        </div>
+        
+        <div class="dashboard-card">
+            <div class="card-header">Pending Reparations</div>
+            <div class="card-content" th:text="${pendingReparations}">0</div>
+        </div>
+        
+        <div class="dashboard-card">
+            <div class="card-header">Completed Reparations</div>
+            <div class="card-content" th:text="${completedReparations}">0</div>
+        </div>
+    </div>
+</body>
+</html>

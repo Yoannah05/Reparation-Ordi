@@ -4,21 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
-@org.springframework.data.relational.core.mapping.Table("clients")
-public class Client {
-
+@Table("composants")
+public class Composant {
     @Id
-    private Long idClient;
-    private String nom;
-    private String prenom;
-    private String adresse;
-    private String telephone;
-    private String email;
+    private Long idComposant;
+    private Double pu;
+    private String nomComposant;
 }

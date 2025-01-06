@@ -1,5 +1,6 @@
 ##  TODO
-
+Me :
+    -   add constraints
 1.  CRUD 
     -   `Back`:
         -   création des models

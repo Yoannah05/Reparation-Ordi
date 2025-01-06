@@ -60,10 +60,11 @@ CREATE TABLE Reparations (
     date_debut DATE,
     date_fin DATE,
     prix_reparation DECIMAL(10, 2) NOT NULL,
-    statut BOOLEAN DEFAULT(status = FALSE)
+    statut BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE Composants_Utilises (
+    id_cu SERIAL PRIMARY KEY,
     id_reparation INT REFERENCES Reparations(id_reparation),
     id_composant INT REFERENCES Composants(id_composant),
     quantite_utilisee INT,
@@ -75,7 +76,7 @@ CREATE TABLE Devis (
     id_ordinateur INT REFERENCES Ordinateurs(id_ordinateur),
     date_du_devis DATE,
     montant_total DECIMAL(10, 2),
-    statut_du_devis VARCHAR(50)
+    statut_devis VARCHAR(50)
 );
 
 CREATE TABLE Paiements (
