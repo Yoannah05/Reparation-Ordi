@@ -1,32 +1,130 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Clients</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechRepair - Gestion Atelier</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
 <body>
-    <h1>Client List</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Adresse</th>
-                <th>Téléphone</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="client : ${clients}">
-                <td th:text="${client.idClient}"></td>
-                <td th:text="${client.nom}"></td>
-                <td th:text="${client.prenom}"></td>
-                <td th:text="${client.adresse}"></td>
-                <td th:text="${client.telephone}"></td>
-                <td th:text="${client.email}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>TechRepair</h3>
+                <img src="/assets/images/logo.webp" alt="Logo" class="logo">
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="/" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="/clients" data-page="clients">
+                        <i class="fas fa-users"></i> Clients
+                    </a>
+                </li>
+                <li>
+                    <a href="/ordinateurs" data-page="computers">
+                        <i class="fas fa-laptop"></i> Ordinateurs
+                    </a>
+                </li>
+                <li>
+                    <a href="/reparations" data-page="repairs">
+                        <i class="fas fa-tools"></i> Réparations
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav class="navbar">
+                <button type="button" id="sidebarCollapse" class="btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="navbar-right">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="/api/placeholder/40/40" alt="Profile">
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </nav>
+
+
+                <!-- Clients Page -->
+                <div id="clients-page" class="page">
+                    <div class="page-header">
+                        <h2>Gestion des Clients</h2>
+                        <button class="btn-primary" id="addClientBtn">
+                            <i class="fas fa-plus"></i> Nouveau Client
+                        </button>
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" placeholder="Rechercher un client...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Téléphone</th>
+                                    <th>Appareils</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clientsTableBody">
+                                <!-- Filled by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+               
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="clientModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Ajouter un Client</h2>
+            <form id="clientForm">
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Téléphone</label>
+                    <input type="tel" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label>Adresse</label>
+                    <textarea name="address"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <!-- <script src="/assets/js/script.js"></script> -->
 </body>
 </html>
