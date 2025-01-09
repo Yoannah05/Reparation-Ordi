@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{layout :: layout(~{::content}, 'Ordinateurs', 'Gestion des ordinateurs', true, ~{::headerActions}, ~{::scripts})}">
+<body>
+    <div th:fragment="headerActions">
+        <a href="/ordinateurs/add" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nouvel Ordinateur
+        </a>
+    </div>
+
+    <div th:fragment="content">
+        <div class="card">
+            <div class="card-body">
+                <!-- Filtres -->
+                <div class="filters mb-4">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <select class="form-control" id="filterMarque">
+                                <option value="">Toutes les marques</option>
+                                <option th:each="marque : ${marques}" 
+                                        th:value="${marque.id}" 
+                                        th:text="${marque.nomMarque}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control" id="filterStatut">
+                                <option value="">Tous les statuts</option>
+                                <option value="en_attente">En attente</option>
+                                <option value="en_cours">En cours</option>
+                                <option value="termine">Terminé</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="searchNumeroSerie" 
+                                   placeholder="Rechercher par N° série...">
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary w-100" onclick="resetFilters()">
+                                <i class="fas fa-sync"></i> Réinitialiser
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table des ordinateurs -->
+                <div class="table-responsive">
+                    <table class="table table-hover" id="ordinateursTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Client</th>
+                                <th>Marque</th>
+                                <th>Modèle</th>
+                                <th>N° Série</th>
+                                <th>Problèmes</th>
+                                <th>Statut</th>
+                                <th>Dernière MAJ</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="ordinateur : ${ordinateurs}">
+                                <td th:text="${ordinateur.id}">1</td>
+                                <td>
+                                    <a th:href="@{/clients/{id}/details(id=${ordinateur.client.id})}"
+                                       th:text="${ordinateur.client.nom + ' ' + ordinateur.client.prenom}">
+                                        Jean Dupont
+                                    </a>
+                                </td>
+                                <td th:text="${ordinateur.marque.nomMarque}">Dell</td>
+                                <td th:text="${ordinateur.modele.nomModele}">XPS 13</td>
+                                <td th:text="${ordinateur.numeroSerie}">SN12345</td>
+                                <td>
+                                    <div class="problem-badges">
+                                        <span th:each="probleme : ${ordinateur.problemes}" 
+                                              class="badge bg-secondary me-1" 
+                                              th:text="${probleme.description}">
+                                            Problème
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge" 
+                                          th:classappend="${ordinateur.statut.badgeClass}"
+                                          th:text="${ordinateur.statut.label}">
+                                        En cours
+                                    </span>
+                                </td>
+                                <td th:text="${#temporals.format(ordinateur.derniereMaj, 'dd/MM/yyyy HH:mm')}">
+                                    01/01/2024
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a th:href="@{/ordinateurs/{id}/edit(id=${ordinateur.id})}" 
+                                           class="btn btn-sm btn-outline-primary"
+                                           title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a th:href="@{/ordinateurs/{id}/details(id=${ordinateur.id})}" 
+                                           class="btn btn-sm btn-outline-info"
+                                           title="Détails">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a th:href="@{/reparations/new(ordinateur=${ordinateur.id})}" 
+                                           class="btn btn-sm btn-outline-success"
+                                           title="Nouvelle réparation"
+                                           th:if="${ordinateur.statut.name() == 'EN_ATTENTE'}">
+                                            <i class="fas fa-tools"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger" 
+                                                onclick="confirmDelete(${ordinateur.id})"
+                                                title="Supprimer"
+                                                th:if="${ordinateur.peutEtreSupprimer}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" th:if="${totalPages > 1}">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/ordinateurs(page=${currentPage - 1})}">Précédent</a>
+                        </li>
+                        <li class="page-item" th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+                            th:classappend="${pageNum == currentPage} ? 'active'">
+                            <a class="page-link" th:href="@{/ordinateurs(page=${pageNum})}" 
+                               th:text="${pageNum}">1</a>
+                        </li>
+                        <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                            <a class="page-link" th:href="@{/ordinateurs(page=${currentPage + 1})}">Suivant</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Modal de confirmation de suppression -->
+                <div class="modal fade" id="deleteModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Confirmation de suppression</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                Êtes-vous sûr de vouloir supprimer cet ordinateur ? Cette action est irréversible.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-danger" id="confirmDelete">Supprimer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:fragment="scripts">
+        <script th:src="@{/js/ordinateurs.js}"></script>
+    </th:block>
+</body>
+</html>

@@ -24,4 +24,22 @@ public class ReparationService {
     public List<Reparation> getAllReparations() {
         return (List<Reparation>) reparationRepository.findAll();
     }
+
+    public List<Reparation> findByProb(Long idProb) {
+        return (List<Reparation>) reparationRepository.findByProbleme(idProb);
+    }
+
+    // public double getCoutReparation(Long idRep) {
+
+    // }
+    // public Reparation finirReparation(Long idrep) {
+    //     // select reparation_odi where id_rep = idrep join composant_utilises joinn composant, sum (pu * quantite utilises) group by composant
+    //     //  
+    //     //  insert sortie stock 
+    //     return null;
+    // }
+
+    // public boolean payer(double montant, Long idRep) {
+    //     //update status = TRUE paiement where id_rep 
+    // }
 }

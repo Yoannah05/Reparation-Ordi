@@ -1,37 +1,36 @@
 // script.js
+//Mise en place de fonctionnalités essentielles
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize charts
+    //Configure , dessine des graphiques sur le tableau de bord
     initializeCharts();
-    
-    // Initialize navigation
+    //Met en place la navigation
     initializeNavigation();
-    
-    // Initialize modals
+    //Initialise les fenêtres modales
     initializeModals();
-    
-    // Load initial data
+    //Charge les données test
     loadMockData();
 });
 
 // Navigation
 function initializeNavigation() {
     // Sidebar toggle
+    //Sélectionne un élément HTML avec l'ID sidebarCollapse (icône de menu)
     document.getElementById('sidebarCollapse').addEventListener('click', function() {
         document.getElementById('sidebar').classList.toggle('collapsed');
     });
 
-//     // Page navigation
-//     document.querySelectorAll('[data-page]').forEach(link => {
-//         link.addEventListener('click', function(e) {
-//             e.preventDefault();
-//             const pageId = this.getAttribute('data-page');
-//             showPage(pageId);
+    // Page navigation
+    document.querySelectorAll('[data-page]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            // e.preventDefault();
+            const pageId = this.getAttribute('data-page');
+            showPage(pageId);
             
-//             // Update active state
-//             document.querySelectorAll('.components li').forEach(li => li.classList.remove('active'));
-//             this.parentElement.classList.add('active');
-//         });
-//     });
+            // Update active state
+            document.querySelectorAll('.components li').forEach(li => li.classList.remove('active'));
+            this.parentElement.classList.add('active');
+        });
+    });
 }
 
 function showPage(pageId) {
@@ -558,11 +557,14 @@ function exportToPDF() {
 }
 
 // Initialisation au chargement
+//Ajout de nouvelles fonctionnalites
 document.addEventListener('DOMContentLoaded', function() {
     initializeCharts();
     initializeNavigation();
     initializeModals();
+    //Ajoute une fonctionnalité pour gérer des filtres
     initializeFilters();
     loadMockData();
+    //Met à jour des statistiques dynamiques sur le tableau de bord
     updateDashboardStats();
 });

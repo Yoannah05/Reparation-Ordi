@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - TechRepair'">TechRepair</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+
+        <div class="main-content">
+            <!-- Header -->
+            <div th:replace="fragments/header :: header"></div>
+
+            <!-- Page Content -->
+            <main class="content-wrapper">
+                <div class="content-header">
+                    <div class="header-title">
+                        <h1 th:text="${pageTitle}">Page Title</h1>
+                        <p th:text="${pageDescription}" class="text-muted">Description de la page</p>
+                    </div>
+                    <div class="header-actions" th:if="${showActions}">
+                        <div th:replace="${headerActions} ?: 'fragments/header-actions :: defaultActions'">
+                            <!-- Actions spécifiques à la page -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <!-- Le contenu spécifique à chaque page sera inséré ici -->
+                    <div th:replace="${content} ?: ~{}">
+                        Content goes here
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals container -->
+    <div id="modalsContainer"></div>
+
+    <!-- Toast notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Core JS -->
+    <script th:src="@{/js/utils.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    
+    <!-- Page specific scripts -->
+    <th:block th:replace="${scripts} ?: ~{}"></th:block>
+
+    <script>
+        // Initialisation globale
+        document.addEventListener('DOMContentLoaded', function() {
+            initTooltips();
+            initSidebar();
+            initNotifications();
+        });
+    </script>
+</body>
+</html>

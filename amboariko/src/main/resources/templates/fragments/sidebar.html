@@ -1,0 +1,56 @@
+<!-- templates/fragments/sidebar.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <nav th:fragment="sidebar" id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <img src="/img/logo.png" alt="Logo" class="logo">
+                <h3>TechRepair</h3>
+            </div>
+            <button id="sidebar-toggle" class="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-content">
+            <ul class="nav-menu">
+                <li th:class="${currentPage == 'dashboard'} ? 'active' : ''">
+                    <a href="/" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Tableau de bord</span>
+                    </a>
+                </li>
+                
+                <li th:class="${currentPage == 'clients'} ? 'active' : ''">
+                    <a href="/clients" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Clients</span>
+                    </a>
+                </li>
+                
+                <li th:class="${currentPage == 'computers'} ? 'active' : ''">
+                    <a href="/ordinateurs" class="nav-link">
+                        <i class="fas fa-laptop"></i>
+                        <span>Ordinateurs</span>
+                    </a>
+                </li>
+                
+                <li th:class="${currentPage == 'repairs'} ? 'active' : ''">
+                    <a href="/reparations" class="nav-link">
+                        <i class="fas fa-tools"></i>
+                        <span>Réparations</span>
+                    </a>
+                </li>
+
+                <li th:class="${currentPage == 'reports'} ? 'active' : ''">
+                    <a href="/rapports" class="nav-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Rapports</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</body>
+</html>

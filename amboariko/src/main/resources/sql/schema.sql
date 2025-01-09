@@ -18,14 +18,20 @@ CREATE TABLE Marques (
     nom_marque VARCHAR(100) NOT NULL
 );
 
+CREATE TABLE categorie_ordi(
+    id_categorie_ordi SERIAL PRIMARY KEY,
+    val VARCHAR(100) NOT NULL
+);
 CREATE TABLE Modeles (
     id_modele SERIAL PRIMARY KEY,
     id_marque INT REFERENCES Marques(id_marque),
+    id_categorie_ordi INT REFERENCES categorie_ordi(id_categorie_ordi),
     nom_modele VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE Problemes (
     id_probleme SERIAL PRIMARY KEY,
+    val VARCHAR(255) NOT NULL,
     description_probleme TEXT NOT NULL
 );
 
@@ -34,18 +40,6 @@ CREATE TABLE Ordinateurs (
     id_client INT REFERENCES Clients(id_client),
     id_modele INT REFERENCES Modeles(id_modele),
     numero_serie VARCHAR(100)
-);
-
-CREATE TABLE Ordi_problemes (
-    id_ordi_prob SERIAL PRIMARY KEY,
-    id_ordinateur INT REFERENCES Ordinateurs(id_ordinateur),
-    id_probleme INT REFERENCES Problemes(id_probleme)
-);
-
-CREATE TABLE Ordi_reparations (
-    id_ordi_rep SERIAL PRIMARY KEY,
-    id_ordi_prob INT REFERENCES Ordi_problemes(id_ordi_prob),
-    id_reparation INT REFERENCES Reparations(id_reparation)
 );
 
 CREATE TABLE Composants (
@@ -63,12 +57,39 @@ CREATE TABLE Reparations (
     statut BOOLEAN DEFAULT FALSE
 );
 
+CREATE TABLE Reparations_ordi (
+    id_rep_ordi SERIAL PRIMARY KEY,
+    id_ordi INT REFERENCES Ordinateurs(id_ordinateur),
+    id_probleme INT REFERENCES Problemes(id_probleme),
+    id_reparation INT REFERENCES Reparations(id_reparation)
+);
+
 CREATE TABLE Composants_Utilises (
     id_cu SERIAL PRIMARY KEY,
-    id_reparation INT REFERENCES Reparations(id_reparation),
+    id_rep_ordi INT REFERENCES Reparations(id_reparation),
     id_composant INT REFERENCES Composants(id_composant),
     quantite_utilisee INT,
     PRIMARY KEY (id_reparation, id_composant)
+);
+
+CREATE TABLE retours (
+    id_retours SERIAL PRIMARY KEY,
+    id_reparation INT REFERENCES Reparations(id_reparation), 
+    date_retour DATE,  -- date à laquelle l'appareil a été retourné
+    statut VARCHAR(50) DEFAULT 'Retour accepté',  -- Exemple: Retour accepté, Retour refusé
+    motif_retour TEXT,  -- Raisons du retour (ex: "Problème persistant après réparation")
+    remboursé BOOLEAN DEFAULT FALSE,  -- Si un remboursement a été effectué
+    FOREIGN KEY (appareil_id) REFERENCES appareils(appareil_id),
+    FOREIGN KEY (reparation_id) REFERENCES reparations(reparation_id)
+);
+
+
+CREATE TABLE Stock (
+    id_stock SERIAL PRIMARY KEY,
+    id_composant INT Composants(id_composant),
+    entree INT,
+    sortie  INT,
+    daty DATE NOT NULL
 );
 
 CREATE TABLE Devis (
@@ -83,5 +104,6 @@ CREATE TABLE Paiements (
     id_paiement SERIAL PRIMARY KEY,
     id_reparation INT REFERENCES Reparations(id_reparation),
     montant_paye DECIMAL(10, 2) NOT NULL,
-    date_paiement DATE
+    date_paiement DATE,
+    statut BOOLEAN DEFAULT FALSE
 );

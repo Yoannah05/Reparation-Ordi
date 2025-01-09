@@ -1,0 +1,76 @@
+<!-- templates/dashboard/index.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Tableau de bord - TechRepair</title>
+</head>
+<body>
+    <!-- Replace with the layout template -->
+    <div th:replace="~{layout :: layout('Dashboard', 'Vue d\'ensemble de l\'activité', true, 'headerActions', 'scripts')}">
+
+        <!-- Content for Dashboard -->
+        <div th:fragment="content">
+            <div class="stats-grid">
+                <!-- Stat Card: Total Reparations -->
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Total Réparations</h3>
+                        <div class="stat-value">
+                            <span th:text="${totalReparations}">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stat Card: Pending Reparations -->
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Réparations en attente</h3>
+                        <div class="stat-value">
+                            <span th:text="${pendingReparations}">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stat Card: Completed Reparations -->
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Réparations Terminées</h3>
+                        <div class="stat-value">
+                            <span th:text="${completedReparations}">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-grid">
+                <!-- Revenue Chart -->
+                <div class="chart-card">
+                    <h3>Chiffre d'affaires</h3>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+
+                <!-- Reparations Chart -->
+                <div class="chart-card">
+                    <h3>Répartition des Réparations</h3>
+                    <canvas id="repairsChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
