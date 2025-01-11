@@ -47,7 +47,10 @@ CREATE TABLE Composants (
     pu DECIMAL(10, 2) NOT NULL,
     nom_composant VARCHAR(100) NOT NULL
 );
-
+CREATE TABLE Type_reparations (
+    id_type_rep SERIAL PRIMARY KEY,
+    val VARCHAR(100) NOT NULL
+);
 CREATE TABLE Reparations (
     id_reparation SERIAL PRIMARY KEY,
     id_ordinateur INT REFERENCES Ordinateurs(id_ordinateur),
@@ -61,28 +64,23 @@ CREATE TABLE Reparations_ordi (
     id_rep_ordi SERIAL PRIMARY KEY,
     id_ordi INT REFERENCES Ordinateurs(id_ordinateur),
     id_probleme INT REFERENCES Problemes(id_probleme),
-    id_reparation INT REFERENCES Reparations(id_reparation)
+    id_reparation INT REFERENCES Reparations(id_reparation),
+    id_type_rep INT REFERENCES Type_reparations(id_type_rep)
 );
 
-CREATE TABLE Composants_Utilises (
-    id_cu SERIAL PRIMARY KEY,
-    id_rep_ordi INT REFERENCES Reparations(id_reparation),
-    id_composant INT REFERENCES Composants(id_composant),
-    quantite_utilisee INT,
-    PRIMARY KEY (id_reparation, id_composant)
-);
+-- CREATE TABLE Composants_Utilises (
+--     id_cu SERIAL PRIMARY KEY,
+--     id_rep_ordi INT REFERENCES Reparations(id_reparation),
+--     id_composant INT REFERENCES Composants(id_composant),
+--     quantite_utilisee INT,
+--     PRIMARY KEY (id_reparation, id_composant)
+-- );
 
 CREATE TABLE retours (
     id_retours SERIAL PRIMARY KEY,
     id_reparation INT REFERENCES Reparations(id_reparation), 
-    date_retour DATE,  -- date à laquelle l'appareil a été retourné
-    statut VARCHAR(50) DEFAULT 'Retour accepté',  -- Exemple: Retour accepté, Retour refusé
-    motif_retour TEXT,  -- Raisons du retour (ex: "Problème persistant après réparation")
-    remboursé BOOLEAN DEFAULT FALSE,  -- Si un remboursement a été effectué
-    FOREIGN KEY (appareil_id) REFERENCES appareils(appareil_id),
-    FOREIGN KEY (reparation_id) REFERENCES reparations(reparation_id)
+    date_retour DATE
 );
-
 
 CREATE TABLE Stock (
     id_stock SERIAL PRIMARY KEY,

@@ -10,5 +10,5 @@ import mg.itu.amboariko.model.Probleme;
 
 @Repository
 public interface ProblemeRepository extends CrudRepository<Probleme, Long>{
-    // Optional<Probleme> findByIdProbleme(Long idProbleme);
+    
 }
