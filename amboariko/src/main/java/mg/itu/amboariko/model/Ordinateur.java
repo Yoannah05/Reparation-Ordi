@@ -13,16 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Ordinateur {
     @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOrdinateur;
-
-    // @ManyToOne
-    // @JoinColumn(name = "idClient")
     private Client client;
-
-    // @ManyToOne
-    // @JoinColumn(name = "idModele")
     private Modele modele;
-
     private String numeroSerie;
 }

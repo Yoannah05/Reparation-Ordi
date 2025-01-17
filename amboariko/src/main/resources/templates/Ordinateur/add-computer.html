@@ -1,18 +1,10 @@
-<!-- templates/ordinateurs/add-ordinateur.html -->
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-      th:replace="~{layout :: layout(~{::content}, 'Nouvel Ordinateur', 'Enregistrer un nouvel ordinateur', false, ~{::headerActions}, ~{::scripts})}">
-<body>
-    <div th:fragment="headerActions">
-        <a href="/ordinateurs" class="btn btn-outline-primary">
-            <i class="fas fa-arrow-left"></i> Retour à la liste
-        </a>
-    </div>
 
-    <div th:fragment="content">
         <div class="card">
             <div class="card-body">
-                <form th:action="@{/ordinateurs/add}" method="post" th:object="${ordinateur}" class="needs-validation" novalidate>
+                <a href="/ordinateurs" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left"></i> Retour à la liste
+                 </a>
+                <form th:action="@{/ordinateurs}" method="post" th:object="${ordinateur}" class="needs-validation" novalidate>
                     <!-- Sélection du client -->
                     <div class="form-group mb-4">
                         <label for="client">Client*</label>
@@ -24,7 +16,7 @@
                                         th:text="${client.nom + ' ' + client.prenom}">
                                 </option>
                             </select>
-                            <a href="/clients/add" class="btn btn-outline-primary">
+                            <a href="/clients/new" class="btn btn-outline-primary">
                                 <i class="fas fa-plus"></i> Nouveau Client
                             </a>
                         </div>
@@ -80,9 +72,6 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-outline-primary" onclick="addProblem()">
-                            <i class="fas fa-plus"></i> Ajouter un problème
-                        </button>
                     </div>
 
                     <div class="form-actions">
@@ -97,10 +86,3 @@
             </div>
         </div>
     </div>
-
-    <th:block th:fragment="scripts">
-        <script th:src="@{/js/form-validation.js}"></script>
-        <script th:src="@{/js/ordinateurs.js}"></script>
-    </th:block>
-</body>
-</html>

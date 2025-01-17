@@ -37,36 +37,35 @@ public class RetourController {
     /**
      * Affiche la page d'insertion de retour avec les réparations disponibles
      */
-    @GetMapping("/insert")
+    @GetMapping("/retours/new")
     public String showInsertForm(Model model) {
-        // Récupérer la liste des réparations depuis la base de données
         List<Reparation> reparations = (List<Reparation>) reparationRepository.findAll();
         model.addAttribute("reparations", reparations);
-        return "Retours/add-retour"; // Nom du fichier Thymeleaf (insertRetour.html)
+        model.addAttribute("body", "Retours/add-retour");
+        return "layout"; 
     }
 
     /**
      * Soumettre le formulaire pour enregistrer le retour
      */
-    @PostMapping("/save")
+    @PostMapping("/retours")
     public String saveRetour(@RequestParam Long idReparation,
             @RequestParam String dateRetour, Model model) {
         try {
-            // Create and populate the Retour object
-            Retour retour = new Retour();
-            retour.setDateRetour(LocalDate.parse(dateRetour));
+            Retour retour = Retour.builder()
+                    .idReparation(idReparation)
+                    .dateRetour(LocalDate.parse(dateRetour))
+                    .build();
 
-            // Call the service method to save the Retour and update the associated
-            // Reparation
             retourService.saveRetourAndUpdateReparation(retour, idReparation);
 
-            // Provide success message
             model.addAttribute("message", "Retour enregistré et réparation mise à jour avec succès.");
-            return "Retours/add-retour"; // Return to the form page
+            model.addAttribute("body", "Retours/add-retour");
+            return "layout"; 
         } catch (Exception e) {
-            // Provide error message in case of failure
             model.addAttribute("message", "Erreur lors de l'enregistrement du retour: " + e.getMessage());
-            return "Retours/add-retour"; // Return to the form page
+            model.addAttribute("body", "Retours/add-retour");
+            return "layout"; 
         }
     }
 
@@ -76,20 +75,19 @@ public class RetourController {
             @RequestParam(required = false) String probleme,
             @RequestParam(required = false) String typeReparation) {
 
-        // Get the filtered list of retours
         List<Retour> retours = retourService.findByCriteria(categorieOrdi, probleme, typeReparation);
 
-        // Add all data needed for the page
         model.addAttribute("retours", retours);
         model.addAttribute("categorieOrdi", categorieOrdi);
         model.addAttribute("probleme", probleme);
         model.addAttribute("typeReparation", typeReparation);
 
-        // Possible filter options (e.g., categories, problems, and types of repairs)
         model.addAttribute("categories", categorieOrdiRepository.findAll());
         model.addAttribute("problemes", probRepo.findAll());
         model.addAttribute("typesReparation", typeRepRepository.findAll());
 
-        return "Retours/retour-list"; // Return the view to render
+        model.addAttribute("body", "Retours/retour-list");
+
+        return "layout";
     }
 }

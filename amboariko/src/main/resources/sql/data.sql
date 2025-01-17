@@ -77,3 +77,7 @@ VALUES
 (5, 1, 2, 3),  -- Ordinateur 2, Problème "Batterie", Réparation 2, Type de réparation "Changement d'écran"
 (3, 3, 3, 4);  -- Ordinateur 3, Problème "Clavier", Réparation 3, Type de réparation "Réparation de carte mère"
 
+INSERT INTO Composants (pu, nom_composant) VALUES
+(150.00, 'Écran LED'),
+(80.00, 'Batterie Lithium'),
+(200.00, 'Disque dur SSD');

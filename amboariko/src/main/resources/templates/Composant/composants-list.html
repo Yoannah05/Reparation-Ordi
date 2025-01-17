@@ -1,0 +1,31 @@
+<div class="card shadow mb-4">
+  <a class="btn-primary" href="/composants/new">
+    <i class="fas fa-plus"></i> Nouveau Composant
+  </a>
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Liste des Composants</h6>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table
+        class="table table-bordered"
+        id="dataTable"
+        width="100%"
+        cellspacing="0"
+      >
+        <thead>
+          <tr>
+            <th>Nom Composant</th>
+            <th>Prix Unitaire</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="composant : ${composants}">
+            <td th:text="${composant.nomComposant}"></td>
+            <td th:text="${composant.pu}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

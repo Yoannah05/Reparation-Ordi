@@ -1,83 +1,81 @@
-<!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org" >
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Retours</title>
-    <!-- Optional CSS - Bootstrap for styling -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-
-<div class="container mt-5">
-    <h1>Liste des Retours</h1>
-
-    <!-- Filter Form -->
-<form action="/retours" method="get" class="mb-4">
+<div class="mb-3">
+  <form action="/retours" method="get" class="mb-4">
     <div class="form-row">
-        <div class="col">
-            <label for="categorieOrdi">Catégorie d'Ordinateur</label>
-            <select name="categorieOrdi" id="categorieOrdi" class="form-control">
-                <option value="" th:selected="${categorieOrdi == null}">Toutes les catégories</option>
-                <option th:each="categorie : ${categories}"
-                        th:value="${categorie.idCategorieOrdi}"
-                        th:selected="${categorie.idCategorieOrdi == categorieOrdi}"
-                        th:text="${categorie.val}"></option>
-            </select>
-        </div>
+      <div class="col">
+        <label for="categorieOrdi">Catégorie d'Ordinateur</label>
+        <select name="categorieOrdi" id="categorieOrdi" class="form-control">
+          <option value="" th:selected="${categorieOrdi == null}">
+            Toutes les catégories
+          </option>
+          <option
+            th:each="categorie : ${categories}"
+            th:value="${categorie.idCategorieOrdi}"
+            th:selected="${categorie.idCategorieOrdi == categorieOrdi}"
+            th:text="${categorie.val}"
+          ></option>
+        </select>
+      </div>
 
-        <div class="col">
-            <label for="probleme">Problème</label>
-            <select name="probleme" id="probleme" class="form-control">
-                <option value="" th:selected="${probleme == null}">Tous les problèmes</option>
-                <option th:each="p : ${problemes}"
-                        th:value="${p.idProbleme}"
-                        th:selected="${p.idProbleme == probleme}"
-                        th:text="${p.val}"></option>
-            </select>
-        </div>
+      <div class="col">
+        <label for="probleme">Problème</label>
+        <select name="probleme" id="probleme" class="form-control">
+          <option value="" th:selected="${probleme == null}">
+            Tous les problèmes
+          </option>
+          <option
+            th:each="p : ${problemes}"
+            th:value="${p.idProbleme}"
+            th:selected="${p.idProbleme == probleme}"
+            th:text="${p.val}"
+          ></option>
+        </select>
+      </div>
 
-        <div class="col">
-            <label for="typeReparation">Type de Réparation</label>
-            <select name="typeReparation" id="typeReparation" class="form-control">
-                <option value="" th:selected="${typeReparation == null}">Tous les types</option>
-                <option th:each="type : ${typesReparation}"
-                        th:value="${type.idTypeRep}"
-                        th:selected="${type.idTypeRep == typeReparation}"
-                        th:text="${type.val}"></option>
-            </select>
-        </div>
+      <div class="col">
+        <label for="typeReparation">Type de Réparation</label>
+        <select name="typeReparation" id="typeReparation" class="form-control">
+          <option value="" th:selected="${typeReparation == null}">
+            Tous les types
+          </option>
+          <option
+            th:each="type : ${typesReparation}"
+            th:value="${type.idTypeRep}"
+            th:selected="${type.idTypeRep == typeReparation}"
+            th:text="${type.val}"
+          ></option>
+        </select>
+      </div>
 
-        <div class="col align-self-end">
-            <button type="submit" class="btn btn-primary">Filtrer</button>
-        </div>
+      <div class="col align-self-end">
+        <button type="submit" class="btn btn-primary">Filtrer</button>
+      </div>
     </div>
-</form>
-
-
+  </form>
+</div>
+<div class="card shadow mb-4">
+  <a class="btn-primary" id="addClientBtn" href="/retours/new">
+    <i class="fas fa-plus"></i> Nouveau Retour
+  </a>
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Liste des Retours</h6>
+  </div>
+  <div class="card-body">
     <!-- List of Retours -->
     <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID Retour</th>
-                <th>ID Réparation</th>
-                <th>Date Retour</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="retour : ${retours}">
-                <td th:text="${retour.idRetour}"></td>
-                <td th:text="${retour.idReparation}"></td>
-                <td th:text="${retour.dateRetour}"></td>
-            </tr>
-        </tbody>
+      <thead>
+        <tr>
+          <th>ID Retour</th>
+          <th>ID Réparation</th>
+          <th>Date Retour</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="retour : ${retours}">
+          <td th:text="${retour.idRetour}"></td>
+          <td th:text="${retour.idReparation}"></td>
+          <td th:text="${retour.dateRetour}"></td>
+        </tr>
+      </tbody>
     </table>
+  </div>
 </div>
-
-<!-- Optional Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-</body>
-</html>

@@ -2,7 +2,10 @@ package mg.itu.amboariko.model;
 
 import lombok.Builder;
 import lombok.Data;
-import java.sql.Date;
+import lombok.Getter;
+
+import java.time.LocalDate;
+
 import org.springframework.data.annotation.Id;
 
 @Data
@@ -12,5 +15,6 @@ public class Paiement {
     private Long idPaiement;
     private Long idReparation;
     private Double montantPaye;
-    private Date datePaiement;
+    private LocalDate datePaiement;
+    private boolean statut;
 }

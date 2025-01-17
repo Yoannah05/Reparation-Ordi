@@ -17,18 +17,24 @@ public class DashboardController {
     }
 
     @GetMapping("/")
-    public String showDashboard(Model model) {
-        // Fetch statistics from the service layer
-        long totalReparations = reparationService.getAllReparations().size();
-        long pendingReparations = reparationService.getAllReparations().stream()
-                .filter(reparation -> !reparation.getStatut()).count(); // Count pending repairs
-        long completedReparations = totalReparations - pendingReparations;
-
-        // Add statistics to the model to display in the dashboard
-        model.addAttribute("totalReparations", totalReparations);
-        model.addAttribute("pendingReparations", pendingReparations);
-        model.addAttribute("completedReparations", completedReparations);
-
-        return "Dashboard/index"; // Return the dashboard view
+    public String home(Model model) {
+        model.addAttribute("body", "home");
+        return "layout";
     }
+    // @GetMapping("/")
+    // public String showDashboard(Model model) {
+
+    //     long totalReparations = reparationService.getAllReparations().size();
+    //     long pendingReparations = reparationService.getAllReparations().stream()
+    //             .filter(reparation -> !reparation.getStatut()).count(); // Count pending repairs
+    //     long completedReparations = totalReparations - pendingReparations;
+
+    //     // Add statistics to the model to display in the dashboard
+    //     model.addAttribute("totalReparations", totalReparations);
+    //     model.addAttribute("pendingReparations", pendingReparations);
+    //     model.addAttribute("completedReparations", completedReparations);
+
+    //     model.addAttribute("content", "home :: content");
+    //     return "layout";
+    // }
 }

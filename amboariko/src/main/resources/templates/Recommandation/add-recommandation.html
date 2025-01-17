@@ -1,0 +1,28 @@
+
+    <div class="card-body">
+    <h1>Add New Recommandation</h1>
+
+    <!-- Form to add a new recommandation -->
+    <form th:action="@{/recommandations}" th:object="${recommandation}" method="post">
+        <!-- Dropdown for selecting Composant -->
+        <label for="idComposant">Composant:</label>
+        <select th:field="*{idComposant}" required>
+            <option value="" disabled selected>Select a Composant</option>
+            <!-- Loop through composant list and populate the dropdown -->
+            <option th:each="composant : ${composants}" th:value="${composant.idComposant}" th:text="${composant.nomComposant}"></option>
+        </select>
+
+        <br />
+
+        <!-- Date input -->
+        <label for="date">Date:</label>
+        <input type="date" id="date" th:field="*{date}" required />
+
+        <br />
+
+        <button type="submit">Save Recommandation</button>
+    </form>
+
+    <br />
+    <a href="/recommandations">Back to Recommandations List</a>
+</div>

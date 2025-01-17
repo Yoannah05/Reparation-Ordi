@@ -1,16 +1,8 @@
-<!-- templates/reparations/add-reparation.html -->
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-      th:replace="~{layout :: layout(~{::content}, 'Nouvelle Réparation', 'Création d''une nouvelle réparation', false, ~{::headerActions}, ~{::scripts})}">
-<body>
-    <div th:fragment="headerActions">
-        <a href="/reparations" class="btn btn-outline-primary">
+
+        <div class="card">
+            <a href="/reparations" class="btn btn-outline-primary">
             <i class="fas fa-arrow-left"></i> Retour à la liste
         </a>
-    </div>
-
-    <div th:fragment="content">
-        <div class="card">
             <div class="card-body">
                 <form th:action="@{/reparations/add}" method="post" th:object="${reparation}" class="needs-validation" novalidate>
                     <!-- Informations de base -->
@@ -60,65 +52,6 @@
                         </button>
                     </div>
 
-                    <!-- Composants nécessaires -->
-                    <div class="section-title">
-                        <h4>Composants à remplacer</h4>
-                    </div>
-                    <div id="composantsContainer">
-                        <div th:each="composant, stat : *{composants}" class="composant-entry mb-3">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <select class="form-control" th:field="*{composants[__${stat.index}__].idComposant}">
-                                        <option value="">Sélectionnez un composant</option>
-                                        <option th:each="comp : ${composantsDisponibles}" 
-                                                th:value="${comp.id}" 
-                                                th:text="${comp.nom + ' - ' + comp.prix + '€'}"
-                                                th:data-prix="${comp.prix}">
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="input-group">
-                                        <input type="number" class="form-control quantite-composant" 
-                                               th:field="*{composants[__${stat.index}__].quantite}"
-                                               min="1" value="1">
-                                        <button type="button" class="btn btn-outline-danger" onclick="removeComposant(this)">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-outline-primary mb-4" onclick="addComposant()">
-                        <i class="fas fa-plus"></i> Ajouter un composant
-                    </button>
-
-                    <!-- Estimation des coûts -->
-                    <div class="section-title">
-                        <h4>Estimation et planification</h4>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="mainOeuvre">Coût main d'œuvre (€)*</label>
-                                <input type="number" class="form-control" id="mainOeuvre" 
-                                       th:field="*{coutMainOeuvre}" min="0" step="0.01" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="dureeEstimee">Durée estimée (heures)*</label>
-                                <input type="number" class="form-control" id="dureeEstimee" 
-                                       th:field="*{dureeEstimee}" min="1" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="total-estimation mt-3">
-                        <h5>Total estimé: <span id="totalEstimation">0.00€</span></h5>
-                    </div>
-
                     <div class="form-actions mt-4">
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Créer la réparation
@@ -131,10 +64,3 @@
             </div>
         </div>
     </div>
-
-    <th:block th:fragment="scripts">
-        <script th:src="@{/js/form-validation.js}"></script>
-        <script th:src="@{/js/reparations.js}"></script>
-    </th:block>
-</body>
-</html>

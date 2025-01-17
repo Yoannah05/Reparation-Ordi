@@ -68,13 +68,12 @@ CREATE TABLE Reparations_ordi (
     id_type_rep INT REFERENCES Type_reparations(id_type_rep)
 );
 
--- CREATE TABLE Composants_Utilises (
---     id_cu SERIAL PRIMARY KEY,
---     id_rep_ordi INT REFERENCES Reparations(id_reparation),
---     id_composant INT REFERENCES Composants(id_composant),
---     quantite_utilisee INT,
---     PRIMARY KEY (id_reparation, id_composant)
--- );
+CREATE TABLE Composants_Utilises (
+    id_cu SERIAL PRIMARY KEY,
+    id_rep_ordi INT REFERENCES Reparations_ordi(id_rep_ordi),
+    id_composant INT REFERENCES Composants(id_composant),
+    quantite_utilisee INT
+);
 
 CREATE TABLE retours (
     id_retours SERIAL PRIMARY KEY,
@@ -82,6 +81,11 @@ CREATE TABLE retours (
     date_retour DATE
 );
 
+CREATE TABLE Recommandations (
+    id_recommandation SERIAL PRIMARY KEY,
+    id_composant INT REFERENCES Composants(id_composant),
+    date DATE
+);
 CREATE TABLE Stock (
     id_stock SERIAL PRIMARY KEY,
     id_composant INT Composants(id_composant),

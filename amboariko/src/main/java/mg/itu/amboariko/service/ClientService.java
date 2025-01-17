@@ -37,4 +37,8 @@ public class ClientService {
     public void deleteClient(Long id) {
         clientRepository.deleteById(id);
     }
+
+    public List<Client> getClientsByReturnDate(String dateRetour) {
+        return clientRepository.findClientsByReturnDate(dateRetour);
+    }
 }

@@ -1,94 +1,19 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insertion de Retour</title>
-    <!-- CSS en ligne pour le style -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 50%;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        label {
-            font-size: 16px;
-            font-weight: bold;
-            color: #555;
-        }
-        select, input[type="date"], button {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
-        select:focus, input[type="date"]:focus, button:focus {
-            outline: none;
-            border-color: #007bff;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        .message {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 18px;
-            color: #d9534f;
-        }
-    </style>
-</head>
-<body>
+<div class="card-body">
+  <h1>Insertion de Retour</h1>
+  <form th:action="@{/retours}" method="post">
+    <label for="idReparation">Sélectionnez une réparation :</label>
+    <select name="idReparation" id="idReparation" required>
+      <option value="" disabled selected>Choisissez une réparation</option>
+      <option
+        th:each="reparation : ${reparations}"
+        th:value="${reparation.idReparation}"
+        th:text="${reparation.idReparation}"
+      ></option>
+    </select>
+    <label for="dateRetour">Date du retour :</label>
+    <input type="date" id="dateRetour" name="dateRetour" required />
 
-<div class="container">
-    <h1>Insertion de Retour</h1>
-    <form action="/save" method="POST">
-        <!-- Liste déroulante des réparations -->
-        <label for="idReparation">Sélectionnez une réparation :</label>
-        <select name="idReparation" id="idReparation" required>
-            <option value="" disabled selected>Choisissez une réparation</option>
-            <!-- Boucle Thymeleaf pour afficher les réparations disponibles -->
-            <option th:each="reparation : ${reparations}" 
-                    th:value="${reparation.idReparation}" 
-                    th:text="${reparation.idReparation}">
-            </option>
-        </select>
-
-        <!-- Date du retour -->
-        <label for="dateRetour">Date du retour :</label>
-        <input type="date" id="dateRetour" name="dateRetour" required>
-
-        <!-- Soumettre le formulaire -->
-        <button type="submit">Enregistrer le retour</button>
-    </form>
-
-    <!-- Message d'erreur ou de succès -->
-    <div class="message" th:if="${message != null}" th:text="${message}"></div>
+    <button type="submit">Enregistrer le retour</button>
+  </form>
+  <div class="message" th:if="${message != null}" th:text="${message}"></div>
 </div>
-</body>
-</html>
