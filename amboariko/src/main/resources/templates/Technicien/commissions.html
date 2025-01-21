@@ -1,0 +1,51 @@
+
+    <h1>Commissions des techniciens</h1>
+
+    <!-- Formulaire de filtre -->
+    <form th:action="@{/commissions}" method="get">
+        <label for="idTechnicien">Technicien :</label>
+        <select id="idTechnicien" name="idTechnicien">
+            <option value="" th:selected="${selectedTechnicien == null}">Tous les techniciens</option>
+            <option th:each="technicien : ${techniciens}"
+                    th:value="${technicien.idTechnicien}"
+                    th:text="${technicien.nom}"
+                >
+            </option>
+        </select>
+
+        <label for="date1">Date de début :</label>
+        <input type="date" id="date1" name="date1" th:value="${#dates.format(date1, 'yyyy-MM-dd')}">
+
+        <label for="date2">Date de fin :</label>
+        <input type="date" id="date2" name="date2" th:value="${#dates.format(date2, 'yyyy-MM-dd')}">
+
+        <button type="submit">Filtrer</button>
+    </form>
+
+    <!-- Table des commissions -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>ID Retours</th>
+                <th>Prix</th>
+                <th>Pourcentage Commission</th>
+                <th>Commission</th>
+                <th>Date Retour</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="commission : ${vmodel}">
+                <td th:text="${commission.nom}"></td>
+                <td th:text="${commission.idRetours}"></td>
+                <td th:text="${commission.prix}"></td>
+                <td th:text="${commission.pourcentageCommission}"></td>
+                <td th:text="${commission.commission}"></td>
+                <td th:text="${commission.dateRetour}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Total des commissions -->
+    <h2>Total des commissions : <span th:text="${sommeCommissions}"></span></h2>
+

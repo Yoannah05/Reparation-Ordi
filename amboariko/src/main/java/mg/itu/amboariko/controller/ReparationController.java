@@ -6,6 +6,8 @@ import mg.itu.amboariko.model.ComposantsUtilises;
 import mg.itu.amboariko.model.Ordinateur;
 import mg.itu.amboariko.model.Probleme;
 import mg.itu.amboariko.model.Reparation;
+import mg.itu.amboariko.model.Technicien;
+import mg.itu.amboariko.model.VModelTechnicienCommission;
 import mg.itu.amboariko.repository.ClientRepository;
 import mg.itu.amboariko.repository.ComposantRepository;
 import mg.itu.amboariko.repository.ComposantUtiliseRepository;
@@ -13,6 +15,8 @@ import mg.itu.amboariko.repository.OrdinateurRepository;
 import mg.itu.amboariko.repository.ProblemeRepository;
 import mg.itu.amboariko.repository.ReparationRepository;
 import mg.itu.amboariko.repository.TypeReparationRepository;
+import mg.itu.amboariko.repository.TechnicienRepository; // Add this import
+import mg.itu.amboariko.service.TechnicienService; // Add this import
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +54,11 @@ public class ReparationController {
     @Autowired
     private ComposantRepository composantRepository;
 
-    @Autowired ComposantUtiliseRepository composantUtiliseRepository;
+    @Autowired
+    private ComposantUtiliseRepository composantUtiliseRepository;
+
+    @Autowired // Add this line
+    private TechnicienService technicienService;
 
     // Afficher la liste des réparations avec filtres
     @GetMapping("/reparations")
@@ -76,6 +84,7 @@ public class ReparationController {
         model.addAttribute("reparations", reparations);
         model.addAttribute("problemes", problemeRepository.findAll());
         model.addAttribute("typesReparation", typeReparationRepository.findAll());
+        model.addAttribute("techniciens", technicienService.getAllTechniciens()); // Fixed
         model.addAttribute("body", "Reparation/reparation-list");
 
         return "layout";
@@ -96,12 +105,14 @@ public class ReparationController {
 
         List<Probleme> problemes = problemeRepository.findProbByReparation(id);
         List<Composant> composantsUtilises = composantRepository.findByReparationId(id);
+        // List<Technicien> techniciens = technicienRepository.findById(id); // Fixed
 
         model.addAttribute("reparation", reparation);
         model.addAttribute("ordinateur", ordinateur);
         model.addAttribute("client", client);
         model.addAttribute("problemes", problemes);
         model.addAttribute("composantsUtilises", composantsUtilises);
+        // model.addAttribute("techniciens", techniciens);
         model.addAttribute("body", "Reparation/reparation-details");
 
         return "layout";
@@ -148,10 +159,11 @@ public class ReparationController {
         model.addAttribute("problemes", problemeRepository.findAll());
         model.addAttribute("typesReparation", typeReparationRepository.findAll());
         model.addAttribute("composants", composantRepository.findAll());
+        model.addAttribute("techniciens", technicienService.getAllTechniciens()); // Fixed
         model.addAttribute("body", "Reparation/add-reparation");
         return "layout";
     }
-    
+
     @PostMapping("/reparations")
     public String addReparation(
             @ModelAttribute Reparation reparation,

@@ -74,6 +74,18 @@
           <option value="false">En cours</option>
         </select>
       </div>
+      
+      <div class="form-group">
+        <label for="idTechnicien">Technicien :</label>
+        <select id="idTechnicien" name="idTechnicien">
+          <option value="" th:selected="${selectedTechnicien == null}">Tous les techniciens</option>
+          <option th:each="technicien : ${techniciens}"
+                  th:value="${technicien.idTechnicien}"
+                  th:text="${technicien.nom}"
+              >
+          </option>
+      </select>
+      </div>
 
       <button type="submit" class="btn btn-primary">Ajouter</button>
     </form>

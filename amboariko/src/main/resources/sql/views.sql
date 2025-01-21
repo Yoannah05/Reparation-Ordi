@@ -16,3 +16,11 @@ JOIN modeles m ON o.id_modele = m.id_modele
 JOIN categorie_ordi c ON m.id_categorie_ordi = c.id_categorie_ordi
 JOIN problemes p ON ro.id_probleme = p.id_probleme
 JOIN type_reparations tr ON ro.id_type_rep = tr.id_type_rep;
+
+CREATE OR REPLACE VIEW v_commissions_techniciens AS
+SELECT t.id_technicien ,t.nom, re.id_retours, r.prix_reparation AS prix,c.val AS pourcentage_commission, (r.prix_reparation * c.val)/100 AS Commission, re.date_retour
+FROM Reparations r
+JOIN Commissions c ON c.id_commission = r.id_commission
+JOIN Techniciens t ON r.id_technicien = t.id_technicien
+JOIN Retours re ON re.id_reparation = r.id_reparation
+WHERE re.date_retour IS NOT NULL;

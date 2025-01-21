@@ -61,11 +61,53 @@ VALUES
     ('Memoire', '...'),
     ('Processeur', 'Problème lié au processeur, comme un ralentissement ou une surchauffe.');
 -- Insertion dans la table Reparations
-INSERT INTO Reparations (id_ordinateur, date_debut, date_fin, prix_reparation, statut)
+INSERT INTO Reparations (id_ordinateur, date_debut, date_fin, prix_reparation, statut, id_technicien, id_commission)
 VALUES
 (1, '2025-01-01', '2025-01-05', 150.00, TRUE),
 (2, '2025-01-02', '2025-01-06', 200.00, FALSE),
 (3, '2025-01-03', '2025-01-07', 120.00, TRUE);
+(4, '2025-01-04', NULL, 4500.00, FALSE, 4, 4),
+(5, '2025-01-05', '2025-01-09', 8750.30, TRUE, 5, 5),
+(6, '2025-01-06', NULL, 10300.20, FALSE, 6, 6),
+(7, '2025-01-07', '2025-01-11', 6500.90, TRUE, 7, 7),
+(1, '2025-01-08', NULL, 25000.00, FALSE, 1, 8),
+(2, '2025-01-09', '2025-01-12', 19500.50, TRUE, 2, 9),
+(3, '2025-01-10', '2025-01-13', 13200.75, TRUE, 3, 10);
+
+-- Insertion dans la table Retours
+INSERT INTO Retours (id_reparation, date_retour) 
+VALUES
+(1, '2025-01-06'),
+(3, '2025-01-08'),
+(12, '2025-01-10'),
+(14, '2025-01-12'),
+(16, '2025-01-13');
+
+-- Insertion dans la table Techniciens
+INSERT INTO Techniciens (nom) VALUES 
+('Rakotoarison Jean'),
+('Randrianasolo Marie'),
+('Rasolomampionona Thierry'),
+('Andriamampionona Claire'),
+('Rakotonirina Patrick'),
+('Raveloarimisa Noeline'),
+('Razafindrakoto Hervé'),
+('Andrianarisoa Nadia'),
+('Rakotovao Julien'),
+('Ramanantsoa Sophie');
+
+-- Insertion dans la table Commissions
+INSERT INTO Commissions (date, val) VALUES 
+('2025-01-01', 5.00),
+('2025-01-02', 5.00),
+('2025-01-03', 5.00),
+('2025-01-04', 5.00),
+('2025-01-05', 5.00),
+('2025-01-06', 5.00),
+('2025-01-07', 5.00),
+('2025-01-08', 5.00),
+('2025-01-09', 5.00),
+('2025-01-10', 5.00);
 
 
 -- Insertion dans la table Reparations_ordi

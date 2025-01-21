@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Date;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -14,14 +11,9 @@ import org.springframework.data.relational.core.mapping.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("reparations")
-public class Reparation {
+@Table("techniciens") // Correction ici
+public class Technicien {
     @Id
-    private Long idReparation;
-    private Long idOrdinateur;
     private Long idTechnicien;
-    private Date dateDebut;
-    private Date dateFin;
-    private Double prixReparation;
-    private Boolean statut = false;
+    private String nom;
 }

@@ -57,7 +57,9 @@ CREATE TABLE Reparations (
     date_debut DATE,
     date_fin DATE,
     prix_reparation DECIMAL(10, 2) NOT NULL,
-    statut BOOLEAN DEFAULT FALSE
+    statut BOOLEAN DEFAULT FALSE,
+    id_technicien INT REFERENCES Techniciens(id_technicien),
+    id_commission INT REFERENCES Commissions(id_commission)
 );
 
 CREATE TABLE Reparations_ordi (
@@ -65,7 +67,18 @@ CREATE TABLE Reparations_ordi (
     id_ordi INT REFERENCES Ordinateurs(id_ordinateur),
     id_probleme INT REFERENCES Problemes(id_probleme),
     id_reparation INT REFERENCES Reparations(id_reparation),
-    id_type_rep INT REFERENCES Type_reparations(id_type_rep)
+    id_type_rep INT REFERENCES Type_reparations(id_type_rep),
+);
+
+CREATE TABLE Techniciens(
+    id_technicien SERIAL PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Commissions(
+    id_commission SERIAL PRIMARY KEY,
+    date DATE,
+    val DECIMAL(10, 2) NOT NULL
 );
 
 CREATE TABLE Composants_Utilises (
@@ -88,7 +101,7 @@ CREATE TABLE Recommandations (
 );
 CREATE TABLE Stock (
     id_stock SERIAL PRIMARY KEY,
-    id_composant INT Composants(id_composant),
+    id_composant INT REFERENCES Composants(id_composant),
     entree INT,
     sortie  INT,
     daty DATE NOT NULL
