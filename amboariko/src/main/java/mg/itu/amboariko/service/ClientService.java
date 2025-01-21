@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import mg.itu.amboariko.model.Client;
 import mg.itu.amboariko.repository.ClientRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +21,9 @@ public class ClientService {
     }
 
     public List<Client> getAllClients() {
-        return (List<Client>) clientRepository.findAll(); 
+        return (List<Client>) clientRepository.findAll();
     }
+
     public Client save(Client client) {
         return clientRepository.save(client);
     }
@@ -38,7 +40,24 @@ public class ClientService {
         clientRepository.deleteById(id);
     }
 
-    public List<Client> getClientsByReturnDate(String dateRetour) {
+    public List<Client> getClientsByReturnDate(LocalDate dateRetour) {
         return clientRepository.findClientsByReturnDate(dateRetour);
+    }
+
+    // Méthode pour mettre à jour un client
+    public Client update(Client client) {
+        Optional<Client> existingClient = clientRepository.findById(client.getIdClient());
+        if (existingClient.isPresent()) {
+            Client updatedClient = existingClient.get();
+            updatedClient.setNom(client.getNom());
+            updatedClient.setPrenom(client.getPrenom());
+            updatedClient.setAdresse(client.getAdresse());
+            updatedClient.setTelephone(client.getTelephone());
+            updatedClient.setEmail(client.getEmail());
+            // Sauvegarde le client mis à jour
+            return clientRepository.save(updatedClient);
+        } else {
+            throw new RuntimeException("Client non trouvé avec l'ID : " + client.getIdClient());
+        }
     }
 }

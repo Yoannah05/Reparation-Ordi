@@ -77,7 +77,7 @@ CREATE TABLE Composants_Utilises (
 
 CREATE TABLE retours (
     id_retours SERIAL PRIMARY KEY,
-    id_reparation INT REFERENCES Reparations(id_reparation), 
+    id_reparation INT REFERENCES Reparations(id_reparation) UNIQUE, 
     date_retour DATE
 );
 

@@ -1,92 +1,176 @@
 package mg.itu.amboariko.controller;
 
+import mg.itu.amboariko.model.Client;
+import mg.itu.amboariko.model.Composant;
+import mg.itu.amboariko.model.ComposantsUtilises;
+import mg.itu.amboariko.model.Ordinateur;
+import mg.itu.amboariko.model.Probleme;
 import mg.itu.amboariko.model.Reparation;
+import mg.itu.amboariko.repository.ClientRepository;
+import mg.itu.amboariko.repository.ComposantRepository;
+import mg.itu.amboariko.repository.ComposantUtiliseRepository;
+import mg.itu.amboariko.repository.OrdinateurRepository;
 import mg.itu.amboariko.repository.ProblemeRepository;
-import mg.itu.amboariko.service.ReparationService;
-
-import java.util.Optional;
-
+import mg.itu.amboariko.repository.ReparationRepository;
+import mg.itu.amboariko.repository.TypeReparationRepository;
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class ReparationController {
 
     @Autowired
-    private ProblemeRepository probRepo;
+    private ReparationRepository reparationRepository;
 
     @Autowired
-    private final ReparationService reparationService;
+    private OrdinateurRepository ordinateurRepository;
 
-    public ReparationController(ReparationService reparationService, ProblemeRepository probRepo) {
-        this.reparationService = reparationService;
-        this.probRepo = probRepo;
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private ProblemeRepository problemeRepository;
+
+    @Autowired
+    private TypeReparationRepository typeReparationRepository;
+
+    @Autowired
+    private ComposantRepository composantRepository;
+
+    @Autowired ComposantUtiliseRepository composantUtiliseRepository;
+
+    // Afficher la liste des réparations avec filtres
+    @GetMapping("/reparations")
+    public String listReparations(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateDebut,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFin,
+            @RequestParam(required = false) Long idProbleme,
+            @RequestParam(required = false) Long idTypeReparation,
+            Model model) {
+
+        List<Reparation> reparations;
+
+        if (dateDebut != null && dateFin != null) {
+            reparations = reparationRepository.findByDateDebutBetween(dateDebut, dateFin);
+        } else if (idProbleme != null) {
+            reparations = reparationRepository.findByProbleme(idProbleme);
+        } else if (idTypeReparation != null) {
+            reparations = reparationRepository.findByTypeReparation(idTypeReparation);
+        } else {
+            reparations = (List<Reparation>) reparationRepository.findAll();
+        }
+
+        model.addAttribute("reparations", reparations);
+        model.addAttribute("problemes", problemeRepository.findAll());
+        model.addAttribute("typesReparation", typeReparationRepository.findAll());
+        model.addAttribute("body", "Reparation/reparation-list");
+
+        return "layout";
     }
 
-    // Afficher le formulaire d'ajout de réparation
+    // Afficher les détails d'une réparation
+    @GetMapping("/reparations/{id}/details")
+    public String showReparationDetails(@PathVariable Long id, Model model) {
+        Reparation reparation = reparationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Réparation non trouvée avec l'ID: " + id));
+
+        Ordinateur ordinateur = ordinateurRepository.findById(reparation.getIdOrdinateur())
+                .orElseThrow(
+                        () -> new RuntimeException("Ordinateur non trouvé avec l'ID: " + reparation.getIdOrdinateur()));
+
+        Client client = clientRepository.findById(ordinateur.getIdClient())
+                .orElseThrow(() -> new RuntimeException("Client non trouvé avec l'ID: " + ordinateur.getIdClient()));
+
+        List<Probleme> problemes = problemeRepository.findProbByReparation(id);
+        List<Composant> composantsUtilises = composantRepository.findByReparationId(id);
+
+        model.addAttribute("reparation", reparation);
+        model.addAttribute("ordinateur", ordinateur);
+        model.addAttribute("client", client);
+        model.addAttribute("problemes", problemes);
+        model.addAttribute("composantsUtilises", composantsUtilises);
+        model.addAttribute("body", "Reparation/reparation-details");
+
+        return "layout";
+    }
+
+    // Rediriger vers l'insertion d'un retour avec l'ID de la réparation pré-rempli
+    @GetMapping("/reparations/{id}/retourner")
+    public String redirectToRetour(@PathVariable Long id) {
+        return "redirect:/retours/new?idReparation=" + id;
+    }
+
+    // Afficher le formulaire pour réparer (choisir les composants utilisés)
+    @GetMapping("/reparations/{id}/reparer")
+    public String showReparerForm(@PathVariable Long id, Model model) {
+        Reparation reparation = reparationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Réparation non trouvée avec l'ID: " + id));
+
+        List<Composant> composants = (List<Composant>) composantRepository.findAll();
+
+        model.addAttribute("reparation", reparation);
+        model.addAttribute("composants", composants);
+        model.addAttribute("body", "Reparation/reparer-form");
+
+        return "layout";
+    }
+
+    // Supprimer une réparation
+    @DeleteMapping("/reparations/{id}")
+    @ResponseBody
+    public ResponseEntity<String> deleteReparation(@PathVariable Long id) {
+        try {
+            reparationRepository.deleteById(id);
+            return ResponseEntity.ok("Réparation supprimée avec succès.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erreur lors de la suppression de la réparation: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/reparations/new")
     public String showAddReparationForm(Model model) {
         model.addAttribute("reparation", new Reparation());
+        model.addAttribute("ordinateurs", ordinateurRepository.findAll());
+        model.addAttribute("problemes", problemeRepository.findAll());
+        model.addAttribute("typesReparation", typeReparationRepository.findAll());
+        model.addAttribute("composants", composantRepository.findAll());
         model.addAttribute("body", "Reparation/add-reparation");
         return "layout";
     }
-
-    // Ajouter une nouvelle réparation
-    @PostMapping("/reparations")
-    public String addReparation(Reparation reparation) {
-        reparationService.save(reparation);
-        return "redirect:/reparations";
-    }
-
-    // Supprimer une réparation par ID
-    @DeleteMapping("/reparations/{id}")
-    public String deleteReparation(@PathVariable Long id) {
-        reparationService.deleteById(id);
-        return "redirect:/reparations";
-    }
-
-    // Mettre à jour une réparation par ID
-    @PutMapping("/reparations/{id}")
-    public String updateReparation(@PathVariable Long id, @RequestBody Reparation reparation) {
-        reparation.setIdReparation(id);
-        reparationService.save(reparation);
-        return "redirect:/reparations/" + id;
-    }
-
-    // Afficher les détails d'une réparation par ID
-    @GetMapping("/reparations/{id}")
-    public String getReparationDetails(@PathVariable Long id, Model model) {
-        Optional<Reparation> reparation = reparationService.getReparationById(id);
-        model.addAttribute("reparation", reparation);
-        model.addAttribute("problemes", reparationService.getProblemesByReparation(id));
-        model.addAttribute("body", "Reparation/details");
-        return "layout";
-    }
-
-    @GetMapping("/reparations/reparer/{id}")
-    public String getMethodName(@RequestParam(value = "id", required = false) Long id) {
-        return new String();
-    }
     
+    @PostMapping("/reparations")
+    public String addReparation(
+            @ModelAttribute Reparation reparation,
+            @RequestParam("composants[]") List<Long> composants,
+            @RequestParam("quantites[]") List<Integer> quantites,
+            Model model) {
 
-    // Liste des réparations avec possibilité de filtrer par problème
-    @GetMapping("/reparations")
-    public String getReparations(@RequestParam(value = "idProbleme", required = false) Long idProbleme, Model model) {
-        if (idProbleme != null) {
-            model.addAttribute("reparations", reparationService.findByProb(idProbleme));
-        } else {
-            model.addAttribute("reparations", reparationService.getAllReparations());
+        // Enregistrer la réparation
+        Reparation savedReparation = reparationRepository.save(reparation);
+
+        // Enregistrer les composants utilisés avec leurs quantités
+        for (int i = 0; i < composants.size(); i++) {
+            ComposantsUtilises composantUtilise = new ComposantsUtilises();
+            composantUtilise.setIdRepOrdi(savedReparation.getIdReparation()); // Référence à la réparation
+            composantUtilise.setIdComposant(composants.get(i)); // ID du composant
+            composantUtilise.setQuantiteUtilisee(quantites.get(i)); // Quantité utilisée
+            composantUtiliseRepository.save(composantUtilise);
         }
-        model.addAttribute("problemes", probRepo.findAll());
-        model.addAttribute("body", "Reparation/reparation-list");
-        return "layout";
+
+        return "redirect:/reparations";
     }
 }

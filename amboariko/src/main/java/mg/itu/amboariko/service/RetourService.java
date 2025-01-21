@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RetourService {
@@ -43,7 +44,32 @@ public class RetourService {
      * @param typeReparation : type de réparation (optionnel)
      * @return Liste de retours correspondant aux critères
      */
-    public List<Retour> findByCriteria(String categorieOrdi, String probleme, String typeReparation) {
+    public List<Retour> findByCriteria(Long categorieOrdi, Long probleme, Long typeReparation) {
         return retourRepository.findByCriteria(categorieOrdi, probleme, typeReparation);
     }
+
+    @Transactional
+    public void deleteRetour(Long idRetours) {
+        Retour retour = retourRepository.findById(idRetours)
+                .orElseThrow(() -> new RuntimeException("Retour non trouvé avec l'ID: " + idRetours));
+        retourRepository.deleteById(idRetours);
+    }
+
+    @Transactional
+    public void updateRetour(Long idRetours, LocalDate dateRetour) {
+        Retour retour = retourRepository.findById(idRetours)
+                .orElseThrow(() -> new RuntimeException("Retour non trouvé avec l'ID: " + idRetours));
+
+        retour.setDateRetour(dateRetour);
+        retourRepository.save(retour);
+    }
+
+    public Optional<Retour> findById(Long id) {
+        return retourRepository.findById(id);
+    }
+
+    public List<Retour> findAll() {
+        return (List<Retour>) retourRepository.findAll();
+    }
+
 }

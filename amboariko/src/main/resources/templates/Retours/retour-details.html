@@ -1,0 +1,40 @@
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Détails du Retour</h6>
+  </div>
+  <div class="card-body">
+    <!-- Informations du retour -->
+    <div class="mb-4">
+      <h4>Informations du Retour</h4>
+      <p><strong>ID Retour :</strong> <span th:text="${retour.idRetour}"></span></p>
+      <p><strong>Date de retour :</strong> <span th:text="${retour.dateRetour}"></span></p>
+      <p><strong>ID Réparation :</strong> <span th:text="${retour.idReparation}"></span></p>
+    </div>
+
+    <!-- Informations de la réparation -->
+    <div class="mb-4">
+      <h4>Réparation Associée</h4>
+      <p><strong>ID Réparation :</strong> <span th:text="${reparation.idReparation}"></span></p>
+      <p><strong>Date de début :</strong> <span th:text="${reparation.dateDebut}"></span></p>
+      <p><strong>Date de fin :</strong> <span th:text="${reparation.dateFin}"></span></p>
+      <p><strong>Prix :</strong> <span th:text="${reparation.prixReparation}"></span></p>
+      <p><strong>Statut :</strong> <span th:text="${reparation.statut}"></span></p>
+    </div>
+
+    <!-- Informations de l'ordinateur -->
+    <div class="mb-4">
+      <h4>Ordinateur Associé</h4>
+      <p><strong>ID Ordinateur :</strong> <span th:text="${ordinateur.idOrdinateur}"></span></p>
+      <p><strong>Modèle :</strong> <span th:text="${ordinateur.idModele}"></span></p>
+    </div>
+
+    <!-- Informations du client -->
+    <div class="mb-4">
+      <h4>Client Associé</h4>
+      <p><strong>ID Client :</strong> <span th:text="${client.idClient}"></span></p>
+      <p><strong>Nom :</strong> <span th:text="${client.nom}"></span></p>
+      <p><strong>Prénom :</strong> <span th:text="${client.prenom}"></span></p>
+      <p><strong>Email :</strong> <span th:text="${client.email}"></span></p>
+    </div>
+  </div>
+</div>

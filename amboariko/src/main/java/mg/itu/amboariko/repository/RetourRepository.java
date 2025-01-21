@@ -20,19 +20,13 @@ public interface RetourRepository extends CrudRepository<Retour, Long> {
      * @return une liste de retours correspondant aux critères
      */
     @Query("""
-                SELECT r.*
-                FROM retours r
-                JOIN reparations rp ON r.id_reparation = rp.id_reparation
-                JOIN reparations_ordi ro ON rp.id_reparation = ro.id_reparation
-                JOIN ordinateurs o ON rp.id_ordinateur = o.id_ordinateur
-                JOIN modeles m ON o.id_modele = m.id_modele
-                JOIN categorie_ordi c ON m.id_categorie_ordi = c.id_categorie_ordi
-                JOIN problemes p ON ro.id_probleme = p.id_probleme
-                JOIN type_reparations tr ON ro.id_type_rep = tr.id_type_rep
+                SELECT id_retours, date_retour, id_reparation
+                FROM v_retours_criteria
                 WHERE
-                    (:categorieOrdi IS NULL OR c.val = :categorieOrdi) AND
-                    (:probleme IS NULL OR p.val = :probleme) AND
-                    (:typeReparation IS NULL OR tr.val = :typeReparation)
+                    (:categorieOrdi IS NULL OR categorie = :categorieOrdi) AND
+                    (:probleme IS NULL OR probleme = :probleme) AND
+                    (:typeReparation IS NULL OR typerep = :typeReparation)
             """)
-    List<Retour> findByCriteria(String categorieOrdi, String probleme, String typeReparation);
+    List<Retour> findByCriteria(Long categorieOrdi, Long probleme, Long typeReparation);
+
 }

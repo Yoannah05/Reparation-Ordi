@@ -1,0 +1,20 @@
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Réparer</h6>
+  </div>
+  <div class="card-body">
+    <form th:action="@{/reparations/{id}/reparer(id=${reparation.idReparation})}" method="post">
+      <div class="form-group">
+        <label for="composants">Composants utilisés :</label>
+        <select class="form-control" id="composants" name="composants" multiple>
+          <option th:each="composant : ${composants}" th:value="${composant.idComposant}" th:text="${composant.nomComposant}"></option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="quantite">Quantité :</label>
+        <input type="number" class="form-control" id="quantite" name="quantite" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Valider</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<div class="card shadow mb-4">
+  <a class="btn btn-primary mb-4" href="/recommandations/new">
+    <i class="fas fa-plus"></i> Nouvelle Recommandation
+  </a>
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Liste des Recommandations</h6>
+  </div>
+  <div class="card-body">
+    <!-- Formulaire de filtre -->
+    <form action="/recommandations" method="get" class="mb-4">
+      <div class="form-row">
+        <div class="col">
+          <label for="date">Date :</label>
+          <input type="date" class="form-control" id="date" name="date">
+        </div>
+        <div class="col align-self-end">
+          <button type="submit" class="btn btn-primary">Filtrer</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Tableau des recommandations -->
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>ID Recommandation</th>
+          <th>Date</th>
+          <th>Composant</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="recommandation : ${recommandations}">
+          <td th:text="${recommandation.idRecommandation}"></td>
+          <td th:text="${recommandation.date}"></td>
+          <td th:text="${recommandation.idComposant}"></td>
+          <td>
+            <div class="btn-group">
+              <!-- Bouton Détails -->
+              <a th:href="@{/recommandations/{id}/details(id=${recommandation.idRecommandation})}" class="btn btn-sm btn-outline-info">
+                <i class="fas fa-eye"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,28 +1,21 @@
-
-    <div class="card-body">
-    <h1>Add New Recommandation</h1>
-
-    <!-- Form to add a new recommandation -->
-    <form th:action="@{/recommandations}" th:object="${recommandation}" method="post">
-        <!-- Dropdown for selecting Composant -->
-        <label for="idComposant">Composant:</label>
-        <select th:field="*{idComposant}" required>
-            <option value="" disabled selected>Select a Composant</option>
-            <!-- Loop through composant list and populate the dropdown -->
-            <option th:each="composant : ${composants}" th:value="${composant.idComposant}" th:text="${composant.nomComposant}"></option>
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Ajouter une Recommandation</h6>
+  </div>
+  <div class="card-body">
+    <form th:action="@{/recommandations}" method="post">
+      <div class="form-group">
+        <label for="idComposant">Composant :</label>
+        <select class="form-control" id="idComposant" name="idComposant" required>
+          <option value="" disabled selected>Choisissez un composant</option>
+          <option th:each="composant : ${composants}" th:value="${composant.idComposant}" th:text="${composant.nomComposant}"></option>
         </select>
-
-        <br />
-
-        <!-- Date input -->
-        <label for="date">Date:</label>
-        <input type="date" id="date" th:field="*{date}" required />
-
-        <br />
-
-        <button type="submit">Save Recommandation</button>
+      </div>
+      <div class="form-group">
+        <label for="date">Date :</label>
+        <input type="date" class="form-control" id="date" name="date" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Ajouter</button>
     </form>
-
-    <br />
-    <a href="/recommandations">Back to Recommandations List</a>
+  </div>
 </div>

@@ -1,19 +1,20 @@
 <div class="card-body">
-  <h1>Insertion de Retour</h1>
-  <form th:action="@{/retours}" method="post">
-    <label for="idReparation">Sélectionnez une réparation :</label>
-    <select name="idReparation" id="idReparation" required>
-      <option value="" disabled selected>Choisissez une réparation</option>
-      <option
-        th:each="reparation : ${reparations}"
-        th:value="${reparation.idReparation}"
-        th:text="${reparation.idReparation}"
-      ></option>
-    </select>
-    <label for="dateRetour">Date du retour :</label>
-    <input type="date" id="dateRetour" name="dateRetour" required />
-
-    <button type="submit">Enregistrer le retour</button>
-  </form>
-  <div class="message" th:if="${message != null}" th:text="${message}"></div>
+    <h1>Insertion de Retour</h1>
+    <form th:action="@{/retours}" method="post">
+        <div class="form-group">
+            <label for="idReparation">Réparation :</label>
+            <select class="form-control" id="idReparation" name="idReparation" required>
+                <option value="" disabled selected>Choisissez une réparation</option>
+                <option th:each="reparation : ${reparations}" 
+                        th:value="${reparation.idReparation}" 
+                        th:text="${reparation.idReparation}"> <!-- Utilisez un attribut pertinent ici -->
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="dateRetour">Date du retour :</label>
+            <input type="date" class="form-control" id="dateRetour" name="dateRetour" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Enregistrer le retour</button>
+    </form>
 </div>

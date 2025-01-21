@@ -1,12 +1,19 @@
 package mg.itu.amboariko.model;
 
+import org.springframework.data.annotation.Id;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ComposantsUtilises {
-    private Long idReparation;
+    @Id
+    private Long idCu;
+    private Long idRepOrdi;
     private Long idComposant;
     private Integer quantiteUtilisee;
 }

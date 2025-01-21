@@ -1,0 +1,12 @@
+<div class="card-body">
+    <h1>Modifier un Retour</h1>
+    <form th:action="@{/retours/{id}(id=${retour.idRetour})}" method="post">
+        <input type="hidden" name="_method" value="put" />
+        <div class="form-group">
+            <label for="dateRetour">Date de Retour :</label>
+            <input type="date" class="form-control" id="dateRetour" name="dateRetour" th:value="${retour.dateRetour}" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+        <a th:href="@{/retours}" class="btn btn-outline-secondary">Annuler</a>
+    </form>
+</div>

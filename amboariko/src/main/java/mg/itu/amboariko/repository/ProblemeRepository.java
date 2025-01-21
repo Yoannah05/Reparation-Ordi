@@ -11,7 +11,7 @@ import mg.itu.amboariko.model.Probleme;
 
 @Repository
 public interface ProblemeRepository extends CrudRepository<Probleme, Long>{
-    @Query("SELECT p.* FROM Probleme p " +
+    @Query("SELECT p.* FROM Problemes p " +
            "JOIN Reparations_ordi ro ON p.id_probleme = ro.id_probleme " +
            "WHERE ro.id_reparation = :idReparation")
     List<Probleme> findProbByReparation(Long idReparation);

@@ -1,5 +1,5 @@
 <div class="card shadow mb-4">
-  <a class="btn-primary" href="/composants/new">
+  <a class="btn btn-primary mb-4" href="/composants/new">
     <i class="fas fa-plus"></i> Nouveau Composant
   </a>
   <div class="card-header py-3">
@@ -7,25 +7,44 @@
   </div>
   <div class="card-body">
     <div class="table-responsive">
-      <table
-        class="table table-bordered"
-        id="dataTable"
-        width="100%"
-        cellspacing="0"
-      >
+      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead>
           <tr>
             <th>Nom Composant</th>
             <th>Prix Unitaire</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr th:each="composant : ${composants}">
             <td th:text="${composant.nomComposant}"></td>
             <td th:text="${composant.pu}"></td>
+            <td>
+              <div class="btn-group">
+                <!-- Bouton Éditer -->
+                <a th:href="@{/composants/{id}/edit(id=${composant.idComposant})}" class="btn btn-sm btn-outline-primary">
+                  <i class="fas fa-edit"></i>
+                </a>
+
+                <!-- Bouton Supprimer -->
+                <form th:action="@{/composants/{id}(id=${composant.id})}" method="POST" onsubmit="return confirmDelete()" style="display: inline;">
+                  <input type="hidden" name="_method" value="DELETE" />
+                  <button type="submit" class="btn btn-sm btn-outline-danger">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
+
+<script>
+  // Fonction pour confirmer la suppression
+  function confirmDelete() {
+    return confirm("Êtes-vous sûr de vouloir supprimer ce composant ?");
+  }
+</script>

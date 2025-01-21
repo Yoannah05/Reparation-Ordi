@@ -1,8 +1,10 @@
 <!-- Formulaire de filtre par date de retour -->
 <div class="mb-3">
+  <form th:action="@{/clients}" method="get" class="mb-3">
     <label for="dateRetour" class="form-label">Filtrer par date de retour</label>
     <input type="date" class="form-control" id="dateRetour" name="dateRetour">
-    <button class="btn btn-primary mt-2" onclick="filterClientsByDate()">Filtrer</button>
+    <button type="submit" class="btn btn-primary mt-2">Filtrer</button>
+</form>
 </div>
 
 <div class="card shadow mb-4">
@@ -65,18 +67,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  function filterClientsByDate() {
-    // Obtenir la date de retour sélectionnée
-    const dateRetour = document.getElementById('dateRetour').value;
-    
-    // Rediriger vers l'URL avec le paramètre de date
-    if (dateRetour) {
-      window.location.href = '/clients?dateRetour=' + dateRetour;
-    } else {
-      // Si aucun filtre n'est sélectionné, recharger sans filtre
-      window.location.href = '/clients';
-    }
-  }
-</script>

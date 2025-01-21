@@ -1,0 +1,79 @@
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Détails du Client</h6>
+  </div>
+  <div class="card-body">
+    <!-- Informations du client -->
+    <div class="mb-4">
+      <h4>Informations du Client</h4>
+      <p><strong>Nom :</strong> <span th:text="${client.nom}"></span></p>
+      <p><strong>Prénom :</strong> <span th:text="${client.prenom}"></span></p>
+      <p><strong>Email :</strong> <span th:text="${client.email}"></span></p>
+    </div>
+
+    <!-- Liste des ordinateurs -->
+    <div class="mb-4">
+      <h4>Ordinateurs</h4>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID Ordinateur</th>
+            <th>Modèle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="ordinateur : ${ordinateurs}">
+            <td th:text="${ordinateur.idOrdinateur}"></td>
+            <td th:text="${ordinateur.idModele}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Liste des réparations -->
+    <div class="mb-4">
+      <h4>Réparations</h4>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID Réparation</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
+            <th>Prix</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="reparation : ${reparations}">
+            <td th:text="${reparation.idReparation}"></td>
+            <td th:text="${reparation.dateDebut}"></td>
+            <td th:text="${reparation.dateFin}"></td>
+            <td th:text="${reparation.prixReparation}"></td>
+            <td th:text="${reparation.statut}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Liste des retours -->
+    <div class="mb-4">
+      <h4>Retours</h4>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID Retour</th>
+            <th>Date de retour</th>
+            <th>ID Réparation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="retour : ${retours}">
+            <td th:text="${retour.idRetour}"></td>
+            <td th:text="${retour.dateRetour}"></td>
+            <td th:text="${retour.idReparation}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

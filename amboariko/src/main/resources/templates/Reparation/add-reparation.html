@@ -1,66 +1,111 @@
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Ajouter une Réparation</h6>
+  </div>
+  <div class="card-body">
+    <form th:action="@{/reparations}" method="post">
+      <!-- Sélection de l'ordinateur -->
+      <div class="form-group">
+        <label for="idOrdinateur">Ordinateur :</label>
+        <select class="form-control" id="idOrdinateur" name="idOrdinateur" required>
+          <option value="" disabled selected>Choisissez un ordinateur</option>
+          <option th:each="ordinateur : ${ordinateurs}" th:value="${ordinateur.idOrdinateur}" th:text="${ordinateur.numeroSerie}"></option>
+        </select>
+      </div>
 
-        <div class="card">
-            <a href="/reparations" class="btn btn-outline-primary">
-            <i class="fas fa-arrow-left"></i> Retour à la liste
-        </a>
-            <div class="card-body">
-                <form th:action="@{/reparations/add}" method="post" th:object="${reparation}" class="needs-validation" novalidate>
-                    <!-- Informations de base -->
-                    <div class="section-title">
-                        <h4>Informations générales</h4>
-                    </div>
+      <!-- Sélection des problèmes -->
+      <div class="form-group">
+        <label for="problemes">Problèmes :</label>
+        <select class="form-control" id="problemes" name="problemes" multiple required>
+          <option th:each="probleme : ${problemes}" th:value="${probleme.idProbleme}" th:text="${probleme.val}"></option>
+        </select>
+      </div>
 
-                    <!-- Sélection de l'ordinateur -->
-                    <div class="form-group mb-4">
-                        <label for="ordinateur">Ordinateur*</label>
-                        <div class="input-group">
-                            <select class="form-control" id="ordinateur" th:field="*{idOrdinateur}" required 
-                                    th:disabled="${ordinateur != null}">
-                                <option value="">Sélectionnez un ordinateur</option>
-                                <option th:each="ord : ${ordinateurs}" 
-                                        th:value="${ord.id}" 
-                                        th:text="${ord.client.nom + ' ' + ord.client.prenom + ' - ' + ord.marque.nom + ' ' + ord.modele.nom + ' (' + ord.numeroSerie + ')'}">
-                                </option>
-                            </select>
-                            <a href="/ordinateurs/add" class="btn btn-outline-primary" th:if="${ordinateur == null}">
-                                <i class="fas fa-plus"></i> Nouvel Ordinateur
-                            </a>
-                        </div>
-                    </div>
+      <!-- Sélection du type de réparation -->
+      <div class="form-group">
+        <label for="idTypeReparation">Type de réparation :</label>
+        <select class="form-control" id="idTypeReparation" name="idTypeReparation" required>
+          <option value="" disabled selected>Choisissez un type de réparation</option>
+          <option th:each="type : ${typesReparation}" th:value="${type.idTypeRep}" th:text="${type.val}"></option>
+        </select>
+      </div>
 
-                    <!-- Problèmes identifiés -->
-                    <div class="form-group mb-4">
-                        <label>Problèmes à résoudre*</label>
-                        <div id="problemesContainer">
-                            <div th:each="probleme, stat : *{problemes}" class="problem-entry mb-2">
-                                <div class="input-group">
-                                    <select class="form-control" th:field="*{problemes[__${stat.index}__].idProbleme}" required>
-                                        <option value="">Sélectionnez un problème</option>
-                                        <option th:each="pb : ${problemesTypes}" 
-                                                th:value="${pb.id}" 
-                                                th:text="${pb.description}">
-                                        </option>
-                                    </select>
-                                    <button type="button" class="btn btn-outline-danger" onclick="removeProbleme(this)">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-outline-primary mt-2" onclick="addProbleme()">
-                            <i class="fas fa-plus"></i> Ajouter un problème
-                        </button>
-                    </div>
-
-                    <div class="form-actions mt-4">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Créer la réparation
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">
-                            <i class="fas fa-undo"></i> Réinitialiser
-                        </button>
-                    </div>
-                </form>
-            </div>
+      <!-- Sélection des composants avec quantité -->
+      <div class="form-group">
+        <label>Composants utilisés :</label>
+        <div id="composants-container">
+          <!-- Un champ vide pour ajouter dynamiquement des composants -->
+          <div class="composant-item mb-2">
+            <select class="form-control composant-select" name="composants[]" required>
+              <option value="" disabled selected>Choisissez un composant</option>
+              <option th:each="composant : ${composants}" th:value="${composant.idComposant}" th:text="${composant.nomComposant}"></option>
+            </select>
+            <input type="number" class="form-control quantite-input" name="quantites[]" placeholder="Quantité" min="1" required>
+          </div>
         </div>
-    </div>
+        <button type="button" class="btn btn-secondary mt-2" onclick="addComposantField()">
+          <i class="fas fa-plus"></i> Ajouter un composant
+        </button>
+      </div>
+
+      <!-- Date de début -->
+      <div class="form-group">
+        <label for="dateDebut">Date de début :</label>
+        <input type="date" class="form-control" id="dateDebut" name="dateDebut" required>
+      </div>
+
+      <!-- Date de fin -->
+      <div class="form-group">
+        <label for="dateFin">Date de fin :</label>
+        <input type="date" class="form-control" id="dateFin" name="dateFin">
+      </div>
+
+      <!-- Prix de la réparation -->
+      <div class="form-group">
+        <label for="prixReparation">Prix de la réparation :</label>
+        <input type="number" class="form-control" id="prixReparation" name="prixReparation" step="0.01" required>
+      </div>
+
+      <!-- Statut de la réparation -->
+      <div class="form-group">
+        <label for="statut">Statut :</label>
+        <select class="form-control" id="statut" name="statut" required>
+          <option value="true">Terminée</option>
+          <option value="false">En cours</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Ajouter</button>
+    </form>
+  </div>
+</div>
+
+<script th:inline="javascript">
+    // Injecter la liste des composants dans une variable JavaScript
+    const composants = /*[[${composants}]]*/ [];
+
+    // Fonction pour ajouter dynamiquement un champ de composant avec quantité
+    function addComposantField() {
+        const container = document.getElementById("composants-container");
+
+        const newItem = document.createElement("div");
+        newItem.classList.add("composant-item", "mb-2");
+
+        // Créer les options pour le select
+        let options = '<option value="" disabled selected>Choisissez un composant</option>';
+        composants.forEach(composant => {
+            options += `<option value="${composant.idComposant}">${composant.nomComposant}</option>`;
+        });
+
+        // Ajouter le select et l'input de quantité
+        newItem.innerHTML = `
+            <select class="form-control composant-select" name="composants[]" required>
+                ${options}
+            </select>
+            <input type="number" class="form-control quantite-input" name="quantites[]" placeholder="Quantité" min="1" required>
+        `;
+
+        // Ajouter le nouvel élément au conteneur
+        container.appendChild(newItem);
+    }
+</script>

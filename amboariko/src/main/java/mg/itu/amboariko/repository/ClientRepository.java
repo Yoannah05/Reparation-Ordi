@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import mg.itu.amboariko.model.Client;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,6 @@ public interface ClientRepository extends CrudRepository<Client, Long> {
     Optional<Client> findByEmail(String email);
 
     @Query("SELECT id_client, nom, prenom, email FROM v_clients_retours WHERE date_retour = :dateRetour")
-    List<Client> findClientsByReturnDate(String dateRetour);
+    List<Client> findClientsByReturnDate(LocalDate dateRetour);
 
 }

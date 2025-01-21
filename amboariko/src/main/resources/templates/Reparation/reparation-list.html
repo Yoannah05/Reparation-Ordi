@@ -1,33 +1,149 @@
 <div class="card shadow mb-4">
-  <a class="btn-primary" id="addClientBtn" href="/clients/new">
-    <i class="fas fa-plus"></i> Nouvelle Reparation
+  <a class="btn btn-primary mb-4" href="/reparations/new">
+    <i class="fas fa-plus"></i> Nouvelle Réparation
   </a>
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Liste des Reparations</h6>
+    <h6 class="m-0 font-weight-bold text-primary">Liste des Réparations</h6>
   </div>
   <div class="card-body">
-    <!-- Table -->
-    <table class="table table-bordered table-striped">
-      <thead class="table-dark">
+    <!-- Formulaire de filtre -->
+    <form action="/reparations" method="get" class="mb-4">
+      <div class="form-row">
+        <div class="col">
+          <label for="dateDebut">Date de début :</label>
+          <input
+            type="date"
+            class="form-control"
+            id="dateDebut"
+            name="dateDebut"
+          />
+        </div>
+        <div class="col">
+          <label for="dateFin">Date de fin :</label>
+          <input type="date" class="form-control" id="dateFin" name="dateFin" />
+        </div>
+        <div class="col">
+          <label for="idProbleme">Problème :</label>
+          <select class="form-control" id="idProbleme" name="idProbleme">
+            <option value="">Tous les problèmes</option>
+            <option
+              th:each="probleme : ${problemes}"
+              th:value="${probleme.idProbleme}"
+              th:text="${probleme.val}"
+            ></option>
+          </select>
+        </div>
+        <div class="col">
+          <label for="idTypeReparation">Type de réparation :</label>
+          <select
+            class="form-control"
+            id="idTypeReparation"
+            name="idTypeReparation"
+          >
+            <option value="">Tous les types</option>
+            <option
+              th:each="type : ${typesReparation}"
+              th:value="${type.idTypeRep}"
+              th:text="${type.val}"
+            ></option>
+          </select>
+        </div>
+        <div class="col align-self-end">
+          <button type="submit" class="btn btn-primary">Filtrer</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Tableau des réparations -->
+    <table class="table table-bordered">
+      <thead>
         <tr>
-          <th>ID</th>
-          <th>Ordinateur ID</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-          <th>Price</th>
-          <th>Status</th>
+          <th>ID Réparation</th>
+          <th>Date de début</th>
+          <th>Date de fin</th>
+          <th>Statut</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr th:each="reparation : ${reparations}">
           <td th:text="${reparation.idReparation}"></td>
-          <td th:text="${reparation.idOrdinateur}"></td>
           <td th:text="${reparation.dateDebut}"></td>
           <td th:text="${reparation.dateFin}"></td>
-          <td th:text="${reparation.prixReparation}"></td>
-          <td th:text="${reparation.statut ? 'Completed' : 'Pending'}"></td>
+          <td th:text="${reparation.statut} ? 'Terminée' : 'En cours'"></td>
+          <td>
+            <div class="btn-group">
+              <!-- Bouton Détails -->
+              <a
+                th:href="@{/reparations/{id}/details(id=${reparation.idReparation})}"
+                class="btn btn-sm btn-outline-info"
+              >
+                <i class="fas fa-eye"></i>
+              </a>
+              <!-- Bouton Éditer -->
+              <a
+                th:href="@{/reparations/{id}/edit(id=${reparation.idReparation})}"
+                class="btn btn-sm btn-outline-primary"
+              >
+                <i class="fas fa-edit"></i>
+              </a>
+              <!-- Bouton de suppression -->
+              <button
+                onclick="confirmDelete(/*[(${reparation.idReparation})]*/)"
+                class="btn btn-sm btn-outline-danger"
+              >
+                <i class="fas fa-trash"></i>
+              </button>
+              <!-- Bouton Retourner -->
+              <a
+                th:href="@{/reparations/{id}/retourner(id=${reparation.idReparation})}"
+                class="btn btn-sm btn-outline-warning"
+              >
+                <i class="fas fa-undo"></i>
+              </a>
+              <!-- Bouton Réparer -->
+              <a
+                th:href="@{/reparations/{id}/reparer(id=${reparation.idReparation})}"
+                class="btn btn-sm btn-outline-success"
+              >
+                <i class="fas fa-tools"></i>
+              </a>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
 </div>
+
+<!-- Script JavaScript -->
+<script th:inline="javascript">
+  function confirmDelete(id) {
+    if (!id) {
+      console.error("ID non défini");
+      alert("Erreur : ID non défini.");
+      return;
+    }
+
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette réparation ?")) {
+      fetch("/reparations/" + id, {
+        // Utilisation de guillemets doubles et concaténation
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            window.location.reload(); // Recharger la page après la suppression
+          } else {
+            alert("Erreur lors de la suppression de la réparation.");
+          }
+        })
+        .catch((error) => {
+          console.error("Erreur :", error);
+          alert("Erreur lors de la suppression.");
+        });
+    }
+  }
+</script>

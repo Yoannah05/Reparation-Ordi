@@ -1,0 +1,31 @@
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Détails de la Réparation</h6>
+  </div>
+  <div class="card-body">
+    <h4>Informations de la réparation</h4>
+    <p><strong>ID Réparation :</strong> <span th:text="${reparation.idReparation}"></span></p>
+    <p><strong>Date de début :</strong> <span th:text="${reparation.dateDebut}"></span></p>
+    <p><strong>Date de fin :</strong> <span th:text="${reparation.dateFin}"></span></p>
+    <p><strong>Statut :</strong> <span th:text="${reparation.statut} ? 'Terminée' : 'En cours'"></span></p>
+
+    <h4>Ordinateur concerné</h4>
+    <p><strong>ID Ordinateur :</strong> <span th:text="${ordinateur.idOrdinateur}"></span></p>
+    <p><strong>Modèle :</strong> <span th:text="${ordinateur.modele}"></span></p>
+
+    <h4>Client</h4>
+    <p><strong>Nom :</strong> <span th:text="${client.nom}"></span></p>
+    <p><strong>Prénom :</strong> <span th:text="${client.prenom}"></span></p>
+    <p><strong>Email :</strong> <span th:text="${client.email}"></span></p>
+
+    <h4>Problèmes</h4>
+    <ul>
+      <li th:each="probleme : ${problemes}" th:text="${probleme.val}"></li>
+    </ul>
+
+    <h4>Composants utilisés</h4>
+    <ul>
+      <li th:each="composant : ${composantsUtilises}" th:text="${composant.nomComposant} + ' - Quantité: ' + ${composant.quantiteUtilisee}"></li>
+    </ul>
+  </div>
+</div>

@@ -1,72 +1,83 @@
-<div class="mb-3">
-  <form action="/retours" method="get" class="mb-4">
-    <div class="form-row">
-      <div class="col">
-        <label for="categorieOrdi">Catégorie d'Ordinateur</label>
-        <select name="categorieOrdi" id="categorieOrdi" class="form-control">
-          <option value="" th:selected="${categorieOrdi == null}">
-            Toutes les catégories
-          </option>
-          <option
-            th:each="categorie : ${categories}"
-            th:value="${categorie.idCategorieOrdi}"
-            th:selected="${categorie.idCategorieOrdi == categorieOrdi}"
-            th:text="${categorie.val}"
-          ></option>
-        </select>
-      </div>
-
-      <div class="col">
-        <label for="probleme">Problème</label>
-        <select name="probleme" id="probleme" class="form-control">
-          <option value="" th:selected="${probleme == null}">
-            Tous les problèmes
-          </option>
-          <option
-            th:each="p : ${problemes}"
-            th:value="${p.idProbleme}"
-            th:selected="${p.idProbleme == probleme}"
-            th:text="${p.val}"
-          ></option>
-        </select>
-      </div>
-
-      <div class="col">
-        <label for="typeReparation">Type de Réparation</label>
-        <select name="typeReparation" id="typeReparation" class="form-control">
-          <option value="" th:selected="${typeReparation == null}">
-            Tous les types
-          </option>
-          <option
-            th:each="type : ${typesReparation}"
-            th:value="${type.idTypeRep}"
-            th:selected="${type.idTypeRep == typeReparation}"
-            th:text="${type.val}"
-          ></option>
-        </select>
-      </div>
-
-      <div class="col align-self-end">
-        <button type="submit" class="btn btn-primary">Filtrer</button>
-      </div>
-    </div>
-  </form>
-</div>
 <div class="card shadow mb-4">
-  <a class="btn-primary" id="addClientBtn" href="/retours/new">
+  <a class="btn btn-primary mb-4" id="addClientBtn" href="/retours/new">
     <i class="fas fa-plus"></i> Nouveau Retour
   </a>
   <div class="card-header py-3">
     <h6 class="m-0 font-weight-bold text-primary">Liste des Retours</h6>
   </div>
   <div class="card-body">
-    <!-- List of Retours -->
+    <!-- Formulaire de filtre -->
+    <div class="mb-3">
+      <form action="/retours" method="get" class="mb-4">
+        <div class="form-row">
+          <div class="col">
+            <label for="categorieOrdi">Catégorie d'Ordinateur</label>
+            <select
+              name="categorieOrdi"
+              id="categorieOrdi"
+              class="form-control"
+            >
+              <option value="" th:selected="${categorieOrdi == null}">
+                Toutes les catégories
+              </option>
+              <option
+                th:each="categorie : ${categories}"
+                th:value="${categorie.idCategorieOrdi}"
+                th:selected="${categorie.idCategorieOrdi == categorieOrdi}"
+                th:text="${categorie.val}"
+              ></option>
+            </select>
+          </div>
+
+          <div class="col">
+            <label for="probleme">Problème</label>
+            <select name="probleme" id="probleme" class="form-control">
+              <option value="" th:selected="${probleme == null}">
+                Tous les problèmes
+              </option>
+              <option
+                th:each="p : ${problemes}"
+                th:value="${p.idProbleme}"
+                th:selected="${p.idProbleme == probleme}"
+                th:text="${p.val}"
+              ></option>
+            </select>
+          </div>
+
+          <div class="col">
+            <label for="typeReparation">Type de Réparation</label>
+            <select
+              name="typeReparation"
+              id="typeReparation"
+              class="form-control"
+            >
+              <option value="" th:selected="${typeReparation == null}">
+                Tous les types
+              </option>
+              <option
+                th:each="type : ${typesReparation}"
+                th:value="${type.idTypeRep}"
+                th:selected="${type.idTypeRep == typeReparation}"
+                th:text="${type.val}"
+              ></option>
+            </select>
+          </div>
+
+          <div class="col align-self-end">
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tableau des retours -->
     <table class="table table-bordered">
       <thead>
         <tr>
           <th>ID Retour</th>
           <th>ID Réparation</th>
           <th>Date Retour</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -74,8 +85,69 @@
           <td th:text="${retour.idRetour}"></td>
           <td th:text="${retour.idReparation}"></td>
           <td th:text="${retour.dateRetour}"></td>
+          <td>
+            <div class="btn-group">
+              <!-- Bouton Éditer -->
+              <a
+                th:href="@{/retours/{id}/edit(id=${retour.idRetour})}"
+                class="btn btn-sm btn-outline-primary"
+              >
+                <i class="fas fa-edit"></i>
+              </a>
+
+              <!-- Bouton Voir les détails -->
+              <a
+                th:href="@{/retours/{id}/details(id=${retour.idRetour})}"
+                class="btn btn-sm btn-outline-info"
+              >
+                <i class="fas fa-eye"></i>
+              </a>
+
+              <!-- Bouton Supprimer -->
+              <form
+                th:action="@{/retours/{id}(id=${retour.idRetour})}"
+                method="POST"
+                onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce retour ?');"
+              >
+                <input type="hidden" name="_method" value="DELETE" />
+                <!-- Champ caché pour simuler DELETE -->
+                <button type="submit" class="btn btn-sm btn-outline-danger">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
 </div>
+
+<script th:inline="javascript">
+  // Fonction confirmDelete qui gère la suppression avec fetch
+  function confirmDelete(idRetour) {
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce retour ?")) {
+      fetch(`/retours/${idRetour}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            // Recharger la page après la suppression
+            window.location.reload();
+          } else {
+            // Si la réponse n'est pas OK, afficher un message d'erreur
+            response.json().then((data) => {
+              alert("Erreur lors de la suppression du retour: " + data.message);
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Erreur :", error);
+          alert("Erreur lors de la suppression.");
+        });
+    }
+  }
+</script>
