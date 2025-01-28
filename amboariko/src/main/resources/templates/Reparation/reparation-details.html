@@ -5,6 +5,10 @@
   <div class="card-body">
     <h4>Informations de la réparation</h4>
     <p><strong>ID Réparation :</strong> <span th:text="${reparation.idReparation}"></span></p>
+    <!-- <p><strong>Téchnicien :</strong> <span th:each="technicien : ${techniciens}" th:value="${technicien.idReparation}" th:text="${technicien.nom}"></span></p> -->
+    <div th:each="technicien : ${techniciens}">
+      <p><strong>Technicien :</strong> <span th:text="${technicien.nom}"></span></p>
+    </div>
     <p><strong>Date de début :</strong> <span th:text="${reparation.dateDebut}"></span></p>
     <p><strong>Date de fin :</strong> <span th:text="${reparation.dateFin}"></span></p>
     <p><strong>Statut :</strong> <span th:text="${reparation.statut} ? 'Terminée' : 'En cours'"></span></p>

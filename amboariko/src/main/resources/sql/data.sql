@@ -94,7 +94,12 @@ INSERT INTO Techniciens (nom) VALUES
 ('Razafindrakoto Hervé'),
 ('Andrianarisoa Nadia'),
 ('Rakotovao Julien'),
-('Ramanantsoa Sophie');
+('Ramanantsoa Sophie'); 
+
+-- Insertion dans la table Sexe
+INSERT INTO Sexe(sexe) VALUES
+('Homme'),
+('Femme');
 
 -- Insertion dans la table Commissions
 INSERT INTO Commissions (date, val) VALUES 

@@ -7,8 +7,8 @@ import mg.itu.amboariko.model.Ordinateur;
 import mg.itu.amboariko.model.Probleme;
 import mg.itu.amboariko.model.Reparation;
 import mg.itu.amboariko.model.Technicien;
-import mg.itu.amboariko.model.VModelTechnicienCommission;
 import mg.itu.amboariko.repository.ClientRepository;
+import mg.itu.amboariko.repository.CommissionRepository;
 import mg.itu.amboariko.repository.ComposantRepository;
 import mg.itu.amboariko.repository.ComposantUtiliseRepository;
 import mg.itu.amboariko.repository.OrdinateurRepository;
@@ -17,6 +17,7 @@ import mg.itu.amboariko.repository.ReparationRepository;
 import mg.itu.amboariko.repository.TypeReparationRepository;
 import mg.itu.amboariko.repository.TechnicienRepository; // Add this import
 import mg.itu.amboariko.service.TechnicienService; // Add this import
+import mg.itu.amboariko.service.CommissionService; // Add this import
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +58,14 @@ public class ReparationController {
     @Autowired
     private ComposantUtiliseRepository composantUtiliseRepository;
 
+    @Autowired
+    private TechnicienRepository technicienRepository;
+
     @Autowired // Add this line
     private TechnicienService technicienService;
+
+    @Autowired // Add this line
+    private CommissionRepository commissionRepository;
 
     // Afficher la liste des réparations avec filtres
     @GetMapping("/reparations")
@@ -97,22 +104,21 @@ public class ReparationController {
                 .orElseThrow(() -> new RuntimeException("Réparation non trouvée avec l'ID: " + id));
 
         Ordinateur ordinateur = ordinateurRepository.findById(reparation.getIdOrdinateur())
-                .orElseThrow(
-                        () -> new RuntimeException("Ordinateur non trouvé avec l'ID: " + reparation.getIdOrdinateur()));
+                .orElseThrow(() -> new RuntimeException("Ordinateur non trouvé avec l'ID: " + reparation.getIdOrdinateur()));
 
         Client client = clientRepository.findById(ordinateur.getIdClient())
                 .orElseThrow(() -> new RuntimeException("Client non trouvé avec l'ID: " + ordinateur.getIdClient()));
 
         List<Probleme> problemes = problemeRepository.findProbByReparation(id);
         List<Composant> composantsUtilises = composantRepository.findByReparationId(id);
-        // List<Technicien> techniciens = technicienRepository.findById(id); // Fixed
+        List<Technicien> techniciens = technicienRepository.findTechnicienById(id); // Ensure this returns valid Technicien objects
 
         model.addAttribute("reparation", reparation);
         model.addAttribute("ordinateur", ordinateur);
         model.addAttribute("client", client);
         model.addAttribute("problemes", problemes);
         model.addAttribute("composantsUtilises", composantsUtilises);
-        // model.addAttribute("techniciens", techniciens);
+        model.addAttribute("techniciens", techniciens);
         model.addAttribute("body", "Reparation/reparation-details");
 
         return "layout";
@@ -160,6 +166,7 @@ public class ReparationController {
         model.addAttribute("typesReparation", typeReparationRepository.findAll());
         model.addAttribute("composants", composantRepository.findAll());
         model.addAttribute("techniciens", technicienService.getAllTechniciens()); // Fixed
+        model.addAttribute("commissions", commissionRepository.findAll());
         model.addAttribute("body", "Reparation/add-reparation");
         return "layout";
     }

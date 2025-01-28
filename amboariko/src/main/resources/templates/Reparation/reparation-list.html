@@ -59,6 +59,7 @@
       <thead>
         <tr>
           <th>ID Réparation</th>
+          <th>Téchnicien</th>
           <th>Date de début</th>
           <th>Date de fin</th>
           <th>Statut</th>
@@ -68,6 +69,7 @@
       <tbody>
         <tr th:each="reparation : ${reparations}">
           <td th:text="${reparation.idReparation}"></td>
+          <td th:text="${reparation.idTechnicien}"></td>
           <td th:text="${reparation.dateDebut}"></td>
           <td th:text="${reparation.dateFin}"></td>
           <td th:text="${reparation.statut} ? 'Terminée' : 'En cours'"></td>

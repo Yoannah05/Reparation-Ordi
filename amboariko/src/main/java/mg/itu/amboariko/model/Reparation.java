@@ -20,6 +20,7 @@ public class Reparation {
     private Long idReparation;
     private Long idOrdinateur;
     private Long idTechnicien;
+    private Long idCommission;
     private Date dateDebut;
     private Date dateFin;
     private Double prixReparation;

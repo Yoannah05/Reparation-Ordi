@@ -72,7 +72,13 @@ CREATE TABLE Reparations_ordi (
 
 CREATE TABLE Techniciens(
     id_technicien SERIAL PRIMARY KEY,
-    nom VARCHAR(100) NOT NULL
+    nom VARCHAR(100) NOT NULL,
+    id_sexe INT REFERENCES Sexe(id_sexe)
+);
+
+CREATE TABLE Sexe(
+    id_sexe SERIAL PRIMARY KEY,
+    sexe VARCHAR(10)
 );
 
 CREATE TABLE Commissions(

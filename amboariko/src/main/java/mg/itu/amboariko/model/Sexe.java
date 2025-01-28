@@ -11,10 +11,9 @@ import org.springframework.data.relational.core.mapping.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("techniciens") // Correction ici
-public class Technicien {
+@Table("sexe")
+public class Sexe {
     @Id
-    private Long idTechnicien;
-    private String nom;
     private Long idSexe;
+    private String sexe;
 }

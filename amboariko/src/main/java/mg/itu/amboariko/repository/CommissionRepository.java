@@ -2,10 +2,9 @@ package mg.itu.amboariko.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-
-import mg.itu.amboariko.model.CategorieOrdi;
+import mg.itu.amboariko.model.Commission;
 
 @Repository
-public interface CategorieOrdiRepository extends CrudRepository<CategorieOrdi, Long>{
+public interface CommissionRepository extends CrudRepository<Commission, Long> {
     
 }

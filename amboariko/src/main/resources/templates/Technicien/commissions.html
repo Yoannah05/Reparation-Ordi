@@ -1,51 +1,201 @@
+<style>
+    .filter-container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 15px;
+        background-color: #f4f4f4;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+ 
+    .filter-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+ 
+    .filter-row label {
+        margin-right: 10px;
+        font-weight: bold;
+        min-width: 120px;
+    }
+ 
+    .filter-row select, 
+    .filter-row input[type="date"] {
+        flex-grow: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+ 
+    .submit-btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+ 
+    .submit-btn:hover {
+        background-color: #0056b3;
+    }
 
-    <h1>Commissions des techniciens</h1>
 
-    <!-- Formulaire de filtre -->
+    h1 {
+        color: #333;
+        text-align: center;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+    }
+
+    select, input[type="date"] {
+        width: 100%;
+        padding: 8px;
+        margin: 8px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    table th {
+        background-color: #007bff;
+        color: white;
+        padding: 12px;
+        text-align: left;
+    }
+
+    table td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    table tr:hover {
+        background-color: #e6e6e6;
+    }
+ </style>
+ 
+ <div class="filter-container">
     <form th:action="@{/commissions}" method="get">
-        <label for="idTechnicien">Technicien :</label>
-        <select id="idTechnicien" name="idTechnicien">
-            <option value="" th:selected="${selectedTechnicien == null}">Tous les techniciens</option>
-            <option th:each="technicien : ${techniciens}"
-                    th:value="${technicien.idTechnicien}"
-                    th:text="${technicien.nom}"
-                >
-            </option>
-        </select>
-
-        <label for="date1">Date de début :</label>
-        <input type="date" id="date1" name="date1" th:value="${#dates.format(date1, 'yyyy-MM-dd')}">
-
-        <label for="date2">Date de fin :</label>
-        <input type="date" id="date2" name="date2" th:value="${#dates.format(date2, 'yyyy-MM-dd')}">
-
-        <button type="submit">Filtrer</button>
+        <div class="filter-row">
+            <label for="filterType">Type de filtre :</label>
+            <select id="filterType" name="filterType" onchange="toggleFilterOptions()">
+                <option value="">Sélectionner un type de filtre</option>
+                <option value="technicien">Filtrer par Technicien</option>
+                <option value="sexe">Filtrer par Sexe</option>
+            </select>
+        </div>
+ 
+        <div id="technicienFilter" style="display:none;" class="filter-row">
+            <label for="idTechnicien">Technicien :</label>
+            <select id="idTechnicien" name="idTechnicien">
+                <option value="" th:selected="${selectedTechnicien == null}">Tous les techniciens</option>
+                <option th:each="technicien : ${techniciens}"
+                        th:value="${technicien.idTechnicien}"
+                        th:text="${technicien.nom}">
+                </option>
+            </select>
+        </div>
+ 
+        <div id="sexeFilter" style="display:none;" class="filter-row">
+            <label for="idSexe">Sexe :</label>
+            <select id="idSexe" name="idSexe">
+                <option value="" th:selected="${selectedSexe == null}">Tous les sexes</option>
+                <option th:each="sexe : ${sexe}"
+                        th:value="${sexe.idSexe}"
+                        th:text="${sexe.sexe}">
+                </option>
+            </select>
+        </div>
+ 
+        <div id="dateFilter" style="display:none;">
+            <div class="filter-row">
+                <label for="date1">Date de début :</label>
+                <input type="date" id="date1" name="date1" th:value="${#dates.format(date1, 'yyyy-MM-dd')}">
+            </div>
+            <div class="filter-row">
+                <label for="date2">Date de fin :</label>
+                <input type="date" id="date2" name="date2" th:value="${#dates.format(date2, 'yyyy-MM-dd')}">
+            </div>
+        </div>
+ 
+        <button type="submit" class="submit-btn">Filtrer</button>
     </form>
+ </div>
+ 
+ <script>
+ function toggleFilterOptions() {
+    var filterType = document.getElementById('filterType').value;
+    var technicienFilter = document.getElementById('technicienFilter');
+    var sexeFilter = document.getElementById('sexeFilter');
+    var dateFilter = document.getElementById('dateFilter');
+ 
+    technicienFilter.style.display = 'none';
+    sexeFilter.style.display = 'none';
+    dateFilter.style.display = 'none';
+ 
+    if (filterType === 'technicien') {
+        technicienFilter.style.display = 'flex';
+        dateFilter.style.display = 'block';
+    } else if (filterType === 'sexe') {
+        sexeFilter.style.display = 'flex';
+        dateFilter.style.display = 'block';
+    }
+ }
+ </script>
 
-    <!-- Table des commissions -->
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>ID Retours</th>
-                <th>Prix</th>
-                <th>Pourcentage Commission</th>
-                <th>Commission</th>
-                <th>Date Retour</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="commission : ${vmodel}">
-                <td th:text="${commission.nom}"></td>
-                <td th:text="${commission.idRetours}"></td>
-                <td th:text="${commission.prix}"></td>
-                <td th:text="${commission.pourcentageCommission}"></td>
-                <td th:text="${commission.commission}"></td>
-                <td th:text="${commission.dateRetour}"></td>
-            </tr>
-        </tbody>
-    </table>
+<!-- Table des commissions -->
+<table border="1">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Sexe</th>
+            <th>ID Retours</th>
+            <th>Prix</th>
+            <th>Pourcentage Commission</th>
+            <th>Commission</th>
+            <th>Date Retour</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="commission : ${vmodel}">
+            <td th:text="${commission.nom}"></td>
+            <td th:text="${commission.idSexe}"></td>
+            <td th:text="${commission.idRetours}"></td>
+            <td th:text="${commission.prix}"></td>
+            <td th:text="${commission.pourcentageCommission}"></td>
+            <td th:text="${commission.commission}"></td>
+            <td th:text="${commission.dateRetour}"></td>
+        </tr>
+    </tbody>
+</table>
 
-    <!-- Total des commissions -->
-    <h2>Total des commissions : <span th:text="${sommeCommissions}"></span></h2>
-
+<!-- Total des commissions -->
+<h2>Total des commissions : <span th:text="${sommeCommissions}"></span></h2>

@@ -8,9 +8,9 @@ import mg.itu.amboariko.model.Technicien;
 import mg.itu.amboariko.repository.TechnicienRepository;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Service
 public class TechnicienService {
@@ -29,8 +29,12 @@ public class TechnicienService {
                 .sum();  // Calcule la somme
     }
 
-    public List<VModelTechnicienCommission> getTechnicienCommmission(Long idTechnicien, LocalDate date1, LocalDate dat2) {
-        return technicienRepository.findTechnicienCommsission(idTechnicien, date1, dat2);
+    public List<VModelTechnicienCommission> getTechnicienCommission(Long idTechnicien, LocalDate date1, LocalDate date2) {
+        return technicienRepository.findTechnicienCommission(idTechnicien, date1, date2);
+    }
+
+    public List<VModelTechnicienCommission> getTechnicienCommissionBySexe(Long idSexe, LocalDate date1, LocalDate date2) {
+        return technicienRepository.findTechnicienCommissionBySexe(idSexe, date1, date2);
     }
 
     public List<Technicien> getAllTechniciens() {
@@ -39,4 +43,13 @@ public class TechnicienService {
         techniciensIterable.forEach(techniciens::add);
         return techniciens;
     }
+
+    public Optional<Technicien> getTechnicienById(Long idTechnicien) {
+        return technicienRepository.findById(idTechnicien);
+    }
+
+    public Technicien saveTechnicien(Technicien technicien) {
+        return technicienRepository.save(technicien);
+    }
+
 }
