@@ -2,7 +2,6 @@ package mg.itu.amboariko.controller;
 
 import mg.itu.amboariko.model.Client;
 import mg.itu.amboariko.model.Composant;
-import mg.itu.amboariko.model.ComposantsUtilises;
 import mg.itu.amboariko.model.Ordinateur;
 import mg.itu.amboariko.model.Probleme;
 import mg.itu.amboariko.model.Reparation;
@@ -15,9 +14,10 @@ import mg.itu.amboariko.repository.OrdinateurRepository;
 import mg.itu.amboariko.repository.ProblemeRepository;
 import mg.itu.amboariko.repository.ReparationRepository;
 import mg.itu.amboariko.repository.TypeReparationRepository;
+import mg.itu.amboariko.repository.ReparationOrdiRepository;
 import mg.itu.amboariko.repository.TechnicienRepository; // Add this import
 import mg.itu.amboariko.service.TechnicienService; // Add this import
-import mg.itu.amboariko.service.CommissionService; // Add this import
+import mg.itu.amboariko.service.ReparationService; // Add this import
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +66,12 @@ public class ReparationController {
 
     @Autowired // Add this line
     private CommissionRepository commissionRepository;
+
+    @Autowired
+    private ReparationOrdiRepository reparationOrdiRepository;
+
+    @Autowired
+    private ReparationService reparationService;
 
     // Afficher la liste des réparations avec filtres
     @GetMapping("/reparations")
@@ -174,22 +180,29 @@ public class ReparationController {
     @PostMapping("/reparations")
     public String addReparation(
             @ModelAttribute Reparation reparation,
+            @RequestParam("problemes") List<Long> problemes,
             @RequestParam("composants[]") List<Long> composants,
             @RequestParam("quantites[]") List<Integer> quantites,
-            Model model) {
+            @RequestParam("idOrdinateur") Long idOrdinateur,
+            @RequestParam("idTypeReparation") Long idTypeReparation,
+            @RequestParam(value = "dateFin", required = false) String dateFin, // Champ optionnel
+            Model model) throws InterruptedException {
 
-        // Enregistrer la réparation
-        Reparation savedReparation = reparationRepository.save(reparation);
-
-        // Enregistrer les composants utilisés avec leurs quantités
-        for (int i = 0; i < composants.size(); i++) {
-            ComposantsUtilises composantUtilise = new ComposantsUtilises();
-            composantUtilise.setIdRepOrdi(savedReparation.getIdReparation()); // Référence à la réparation
-            composantUtilise.setIdComposant(composants.get(i)); // ID du composant
-            composantUtilise.setQuantiteUtilisee(quantites.get(i)); // Quantité utilisée
-            composantUtiliseRepository.save(composantUtilise);
+        // Vérifier si la date est fournie et bien la convertir en LocalDate
+        if (dateFin != null && !dateFin.isEmpty()) {
+            reparation.setDateFin(LocalDate.parse(dateFin)); // Correct
+        } else {
+            reparation.setDateFin(null); // Permet d'éviter les erreurs si le champ est vide
         }
+
+        // Assigner l'ordinateur et gérer la réparation
+        reparation.setIdOrdinateur(idOrdinateur);
+        reparationService.reparer(reparation, problemes, composants, quantites, idOrdinateur, idTypeReparation);
 
         return "redirect:/reparations";
     }
+
+
+    
+
 }

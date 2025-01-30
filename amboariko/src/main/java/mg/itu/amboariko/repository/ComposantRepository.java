@@ -11,6 +11,6 @@ import mg.itu.amboariko.model.Composant;
 public interface ComposantRepository extends CrudRepository<Composant, Long>{
 
     @Query("SELECT c.* FROM composants c JOIN composants_utilises cu ON c.id_composant = cu.id_composant WHERE cu.id_rep_ordi = :idReparation")
-List<Composant> findByReparationId(Long idReparation);
+    List<Composant> findByReparationId(Long idReparation);
 
 }

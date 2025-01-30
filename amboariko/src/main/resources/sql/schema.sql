@@ -44,14 +44,33 @@ CREATE TABLE Ordinateurs (
 
 CREATE TABLE Composants (
     id_composant SERIAL PRIMARY KEY,
-    pu DECIMAL(10, 2) NOT NULL,
     nom_composant VARCHAR(100) NOT NULL
 );
+
+CREATE TABLE ComposantsPrix (
+    id_composant_prix SERIAL PRIMARY KEY,
+    id_composant INT REFERENCES Composants(id_composant),
+    prix DECIMAL(10, 2) NOT NULL,
+    date DATE
+);
+
 CREATE TABLE Type_reparations (
     id_type_rep SERIAL PRIMARY KEY,
     val VARCHAR(100) NOT NULL
 );
-CREATE TABLE Reparations (
+
+CREATE TABLE Sexe(
+    id_sexe SERIAL PRIMARY KEY,
+    sexe VARCHAR(10)
+);
+
+CREATE TABLE Techniciens(
+    id_technicien SERIAL PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    id_sexe INT REFERENCES Sexe(id_sexe)
+);
+
+CREATE TABLE Reparations(
     id_reparation SERIAL PRIMARY KEY,
     id_ordinateur INT REFERENCES Ordinateurs(id_ordinateur),
     date_debut DATE,
@@ -62,23 +81,12 @@ CREATE TABLE Reparations (
     id_commission INT REFERENCES Commissions(id_commission)
 );
 
-CREATE TABLE Reparations_ordi (
+CREATE TABLE Reparations_ordi(
     id_rep_ordi SERIAL PRIMARY KEY,
     id_ordi INT REFERENCES Ordinateurs(id_ordinateur),
     id_probleme INT REFERENCES Problemes(id_probleme),
     id_reparation INT REFERENCES Reparations(id_reparation),
-    id_type_rep INT REFERENCES Type_reparations(id_type_rep),
-);
-
-CREATE TABLE Techniciens(
-    id_technicien SERIAL PRIMARY KEY,
-    nom VARCHAR(100) NOT NULL,
-    id_sexe INT REFERENCES Sexe(id_sexe)
-);
-
-CREATE TABLE Sexe(
-    id_sexe SERIAL PRIMARY KEY,
-    sexe VARCHAR(10)
+    id_type_rep INT REFERENCES Type_reparations(id_type_rep)
 );
 
 CREATE TABLE Commissions(
@@ -87,14 +95,14 @@ CREATE TABLE Commissions(
     val DECIMAL(10, 2) NOT NULL
 );
 
-CREATE TABLE Composants_Utilises (
+CREATE TABLE Composants_Utilises(
     id_cu SERIAL PRIMARY KEY,
     id_rep_ordi INT REFERENCES Reparations_ordi(id_rep_ordi),
     id_composant INT REFERENCES Composants(id_composant),
     quantite_utilisee INT
 );
 
-CREATE TABLE retours (
+CREATE TABLE retours(
     id_retours SERIAL PRIMARY KEY,
     id_reparation INT REFERENCES Reparations(id_reparation) UNIQUE, 
     date_retour DATE

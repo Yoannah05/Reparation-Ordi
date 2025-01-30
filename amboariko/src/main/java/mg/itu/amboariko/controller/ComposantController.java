@@ -9,12 +9,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import mg.itu.amboariko.model.Composant;
+import mg.itu.amboariko.model.ComposantPrix;
 import mg.itu.amboariko.repository.ComposantRepository;
+import mg.itu.amboariko.repository.ComposantPrixRepository;
 
 @Controller
 public class ComposantController {
     @Autowired
     private ComposantRepository compRepo;
+
+    @Autowired
+    private ComposantPrixRepository compPrixRepo;
 
     public ComposantController(ComposantRepository composantrepo) {
         compRepo = composantrepo;
@@ -27,10 +32,25 @@ public class ComposantController {
         return "layout";
     }
 
+    @GetMapping("/composants/historiquePrix")
+    public String listComposantsPrix(Model model) {
+        model.addAttribute("composants", compPrixRepo.findAll());
+        model.addAttribute("body", "Composant/composant-list-prix");
+        return "layout";
+    }
+
     @GetMapping("/composants/new")
     public String showAddForm(Model model) {
         model.addAttribute("composant", new Composant());
         model.addAttribute("body", "Composant/add-composant");
+        return "layout";
+    }
+
+    @GetMapping("/composants/newPrix")
+    public String showAddPrixForm(Model model) {
+        model.addAttribute("composantPrix", new ComposantPrix());
+        model.addAttribute("composants", compRepo.findAll()); // Charger tous les composants pour le select
+        model.addAttribute("body", "Composant/add-composantPrix");
         return "layout";
     }
 
@@ -41,6 +61,12 @@ public class ComposantController {
         model.addAttribute("composant", composant);
         model.addAttribute("body", "Composant/add-composant");
         return "layout";
+    }
+
+    @PostMapping("/composants/newPrix")
+    public String addComposantPrix(@ModelAttribute ComposantPrix composantPrix) {
+        compPrixRepo.save(composantPrix);
+        return "redirect:/composants/historiquePrix";
     }
 
     @PostMapping("/composants")

@@ -11,14 +11,12 @@
         <thead>
           <tr>
             <th>Nom Composant</th>
-            <th>Prix Unitaire</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr th:each="composant : ${composants}">
             <td th:text="${composant.nomComposant}"></td>
-            <td th:text="${composant.pu}"></td>
             <td>
               <div class="btn-group">
                 <!-- Bouton Éditer -->
@@ -26,13 +24,6 @@
                   <i class="fas fa-edit"></i>
                 </a>
 
-                <!-- Bouton Supprimer -->
-                <form th:action="@{/composants/{id}(id=${composant.id})}" method="POST" onsubmit="return confirmDelete()" style="display: inline;">
-                  <input type="hidden" name="_method" value="DELETE" />
-                  <button type="submit" class="btn btn-sm btn-outline-danger">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </form>
               </div>
             </td>
           </tr>
@@ -41,10 +32,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  // Fonction pour confirmer la suppression
-  function confirmDelete() {
-    return confirm("Êtes-vous sûr de vouloir supprimer ce composant ?");
-  }
-</script>

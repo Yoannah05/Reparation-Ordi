@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
@@ -21,8 +22,8 @@ public class Reparation {
     private Long idOrdinateur;
     private Long idTechnicien;
     private Long idCommission;
-    private Date dateDebut;
-    private Date dateFin;
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
     private Double prixReparation;
     private Boolean statut = false;
 }
